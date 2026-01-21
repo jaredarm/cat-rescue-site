@@ -7,15 +7,8 @@
     <title>{% block title %}9 Lives Cat Rescue{% endblock %}</title>
 
     {% load static %}
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {},
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
     <script>
         // Shrink navbar on scroll
         window.addEventListener('scroll', () => {
