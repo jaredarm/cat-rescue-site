@@ -23,4 +23,7 @@ Thumbs.db
 tailwindcss
 tailwind.config.js
 
+# Misc
+.vscode/
+.idea/
 scratch/
