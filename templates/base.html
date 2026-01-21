@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}9 Lives Cat Rescue{% endblock %}</title>
+
+    {% load static %}
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {},
+            }
+        }
+    </script>
+    <script>
+        // Shrink navbar on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            nav.classList.toggle('bg-purple-900', window.scrollY > 50);
+            nav.classList.toggle('py-2', window.scrollY > 50);
+            nav.classList.toggle('py-4', window.scrollY <= 50);
+        });
+    </script>
+
+
+    <!-- Alpine.js CDN -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- heroicons -->
+    <script src="https://cdn.jsdelivr.net/npm/heroicons@2.0.17/dist/heroicons.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- NAVBAR -->
+    <nav
+        class="fixed top-0 w-full z-50 transition-all duration-300 bg-purple-700 py-4 px-6 text-white flex items-center justify-between">
+
+        <div class="text-lg font-bold tracking-wide">
+            <!-- Logo -->
+            <a href="/" class="text-xl font-semibold text-white">
+                <img src="{% static 'images/9lives_logo.webp' %}" alt="9 Lives Cat Rescue Logo" class="h-10 w-auto">
+                9 LIVES CAT RESCUE
+            </a>
+        </div>
+
+        <ul class="hidden md:flex space-x-4 text-sm">
+            <li><a href="/" class="hover:underline">Home</a></li>
+            <li><a href="/about/" class="hover:underline">About Us</a></li>
+            <li><a href="/cats/" class="hover:underline">Cats for adoption</a></li>
+            <li><a href="/fostering/" class="hover:underline">Fostering</a></li>
+            <li><a href="/events/" class="hover:underline">Events</a></li>
+            <li><a href="/shop/" class="hover:underline">Shop</a></li>
+        </ul>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none">
+            <i class="fa fa-bars fa-lg"></i>
+        </button>
+    </nav>
+
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2">
+        <a href="/" class="block hover:text-blue-600">Home</a>
+        <a href="/about/" class="block hover:text-blue-600">About Us</a>
+        <a href="/cats/" class="block hover:text-blue-600">Cats For Adoption</a>
+        <a href="/our-vets/" class="block hover:text-blue-600">Our Vets</a>
+        <a href="/fostering/" class="block hover:text-blue-600">Fostering</a>
+        <a href="/our-supporters/" class="block hover:text-blue-600">Our Supporters</a>
+        <a href="/our-team/" class="block hover:text-blue-600">Our Team</a>
+        <a href="/admin/" class="block hover:text-blue-600">Admin</a>
+    </div>
+
+    <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+    </script>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t py-6 mt-12">
+        {% if user.is_authenticated %}
+        <li>User: {{ user.get_username }}</li>
+        <li>
+            <form id="logout-form" method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link">Logout</button>
+            </form>
+        </li>
+        {% else %}
+        <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
+        {% endif %}
+        <div class="max-w-6xl mx-auto px-4 text-center text-gray-600">
+            <p>© {{ now|date:"Y" }} 9 Lives Cat Rescue - Giving rescue cats a chance at a second life</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

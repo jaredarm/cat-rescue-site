@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Available Cats{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Available Cats</h1>
+
+{% if cats %}
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for cat in cats %}
+    <!-- Cat details, picture on top, details underneath -->
+    <div class="flex-col items-center bg-white p-4 rounded shadow mb-4">
+        <div class="ml-4">
+            <img src="{{ cat.primary_image.image.url }}" alt="{{ cat.name }}"
+                class="h-48 w-full rounded object-cover md:h-full md:w-48" />
+        </div>
+        <div class="ml-4 flex-1">
+            <h2 class="text-xl font-semibold">{{ cat.name }}</h2>
+            {% if cat.tagline %}
+            <p class="text-gray-600 italic">{{ cat.tagline }}</p>
+            {% endif %}
+            <p class="mt-2 text-sm text-gray-500">
+                <i class="fas fa-birthday-cake"></i> {{ cat.age|default:"Unknown" }}<br>
+                <i class="fas fa-paw"></i> {{ cat.breed.name|default:"Unknown" }}
+            </p>
+            <a href="{% url 'cat_detail' cat.pk %}"
+                class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                View Details
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-gray-600">No cats match the current filters.</p>
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Edit {{ object.name }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Edit {{ object.name }}</h1>
+
+<form method="post" enctype="multipart/form-data" class="space-y-10">
+    {% csrf_token %}
+
+    <!-- BASIC INFO -->
+    <section class="space-y-4">
+        <h2 class="text-xl font-semibold">Basic Info</h2>
+
+        {% include "cats/partials/field_row.html" with field=form.name %}
+        {% include "cats/partials/field_row.html" with field=form.date_of_birth %}
+        {% include "cats/partials/field_row.html" with field=form.estimated_dob %}
+        {% include "cats/partials/field_row.html" with field=form.breed %}
+        {% include "cats/partials/field_row.html" with field=form.colour %}
+        {% include "cats/partials/field_row.html" with field=form.status %}
+        {% include "cats/partials/field_row.html" with field=form.fostered_in %}
+    </section>
+
+    <!-- DESCRIPTION -->
+    <section class="space-y-4">
+        <h2 class="text-xl font-semibold">Description</h2>
+        {% include "cats/partials/field_row.html" with field=form.tagline %}
+        {% include "cats/partials/field_row.html" with field=form.description %}
+    </section>
+
+    <!-- Health Info -->
+    <section class="space-y-4">
+        <h2 class="text-xl font-semibold">Basic Info</h2>
+
+        {% include "cats/partials/field_row.html" with field=form.is_vaccinated %}
+        {% include "cats/partials/field_row.html" with field=form.vaccinated_notes %}
+        {% include "cats/partials/field_row.html" with field=form.is_microchipped %}
+        {% include "cats/partials/field_row.html" with field=form.microchip_number %}
+        {% include "cats/partials/field_row.html" with field=form.is_sterilised %}
+        {% include "cats/partials/field_row.html" with field=form.is_fiv_positive %}
+        {% include "cats/partials/field_row.html" with field=form.health_notes %}
+
+    </section>
+
+
+    <!-- Compatibility -->
+    <section class="space-y-4">
+        <h2 class="text-xl font-semibold">Basic Info</h2>
+
+        {% include "cats/partials/field_row.html" with field=form.is_good_with_kids %}
+        {% include "cats/partials/field_row.html" with field=form.good_with_kids_notes %}
+        {% include "cats/partials/field_row.html" with field=form.is_good_with_dogs %}
+        {% include "cats/partials/field_row.html" with field=form.good_with_dogs_notes %}
+        {% include "cats/partials/field_row.html" with field=form.is_good_with_cats %}
+        {% include "cats/partials/field_row.html" with field=form.good_with_cats_notes %}
+
+    </section>
+
+    <!-- IMAGES -->
+    <section class="space-y-4">
+        <h2 class="text-xl font-semibold">Images</h2>
+
+        {{ image_formset.management_form }}
+
+        <div class="space-y-6">
+            {% for img_form in image_formset %}
+                <div class="border p-4 rounded space-y-4">
+
+                    {% if img_form.instance.pk %}
+                        <img src="{{ img_form.instance.image.url }}"
+                             class="h-32 w-32 object-cover rounded border" />
+                    {% endif %}
+                    {% include "cats/partials/field_row.html" with label="Primary Image" field=img_form.primary %}
+                    {% include "cats/partials/field_row.html" with label="Image File" field=img_form.image %}
+                    {% include "cats/partials/field_row.html" with label="Caption" field=img_form.caption %}
+
+                    {% if img_form.instance.pk %}
+                        {% include "cats/partials/field_row.html" with label="Delete" field=img_form.DELETE %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- ACTIONS -->
+    <div class="flex justify-between items-center pt-6">
+
+        <div class="flex gap-4">
+            <button class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                Save Changes
+            </button>
+            <a href="{% url 'cat_detail' object.pk %}"
+                class="px-6 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+                Cancel
+            </a>
+        </div>
+        <a href="{% url 'cat_delete' object.pk %}"
+            class="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+            Delete Cat
+            </a>
+        </div>
+</form>
+{% endblock %}
