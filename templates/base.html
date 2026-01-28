@@ -9,7 +9,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-    <script>
+    <!-- <script>
         // Shrink navbar on scroll
         window.addEventListener('scroll', () => {
             const nav = document.querySelector('nav');
@@ -17,7 +17,7 @@
             nav.classList.toggle('py-2', window.scrollY > 50);
             nav.classList.toggle('py-4', window.scrollY <= 50);
         });
-    </script>
+    </script> -->
 
 
     <!-- Alpine.js CDN -->
@@ -31,19 +31,21 @@
 
 </head>
 
-<body class="bg-gray-100 text-gray-900">
-
+<body class="bg-gray-300 text-gray-900">
     <!-- NAVBAR -->
     <nav
         class="fixed top-0 w-full z-50 transition-all duration-300 bg-purple-700 py-4 px-6 text-white flex items-center justify-between">
 
-        <div class="text-lg font-bold tracking-wide">
-            <!-- Logo -->
-            <a href="/" class="text-xl font-semibold text-white">
-                <img src="{% static 'images/9lives_logo.webp' %}" alt="9 Lives Cat Rescue Logo" class="h-10 w-auto">
-                9 LIVES CAT RESCUE
-            </a>
-        </div>
+        <!-- Logo and name -->
+        <a href="/" class="flex items-center">
+            <div class="flex">
+                <img class="h-20 w-auto rounded-md mr-2" src="{% static 'images/9lives_logo.webp' %}"
+                    alt="9 Lives Cat Rescue Logo">
+            </div>
+            <div class="text-white font-semibold text-xl">
+                9 Lives Cat Rescue
+            </div>
+        </a>
 
         <ul class="hidden md:flex space-x-4 text-sm">
             <li><a href="/" class="hover:underline">Home</a></li>
@@ -62,17 +64,19 @@
 
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2">
-        <a href="/" class="block hover:text-blue-600">Home</a>
-        <a href="/about/" class="block hover:text-blue-600">About Us</a>
-        <a href="/cats/" class="block hover:text-blue-600">Cats For Adoption</a>
-        <a href="/our-vets/" class="block hover:text-blue-600">Our Vets</a>
-        <a href="/fostering/" class="block hover:text-blue-600">Fostering</a>
-        <a href="/our-supporters/" class="block hover:text-blue-600">Our Supporters</a>
-        <a href="/our-team/" class="block hover:text-blue-600">Our Team</a>
-        <a href="/admin/" class="block hover:text-blue-600">Admin</a>
+    <div id="mobile-menu"
+        class="hidden md:hidden fixed mt-4 px-4 pt-2 pb-2 space-y-2 z-50 bg-purple-600 w-full text-white">
+        <a href="/" class="block">Home</a>
+        <a href="/about/" class="block">About Us</a>
+        <a href="/cats/" class="block">Cats For Adoption</a>
+        <a href="/our-vets/" class="block">Our Vets</a>
+        <a href="/fostering/" class="block">Fostering</a>
+        <a href="/our-supporters/" class="block">Our Supporters</a>
+        <a href="/our-team/" class="block">Our Team</a>
+        <a href="/admin/" class="block">Admin</a>
     </div>
 
+    <!-- Mobile Menu Toggle Script -->
     <script>
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
@@ -80,12 +84,12 @@
     </script>
 
     <!-- MAIN CONTENT -->
-    <main class="max-w-6xl mx-auto px-4 py-8">
+    <main class="max-w-6xl mx-auto my-24 px-4 py-8">
         {% block content %}{% endblock %}
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-white border-t py-6 mt-12">
+    <footer class="flex w-full bottom-0 fixed bg-white border-t py-6">
         {% if user.is_authenticated %}
         <li>User: {{ user.get_username }}</li>
         <li>

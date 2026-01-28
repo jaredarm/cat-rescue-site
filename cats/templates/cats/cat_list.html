@@ -3,7 +3,7 @@
 {% block title %}Cats for Adoption{% endblock %}
 {% block content %}
 
-<div class="pt-20 px-4 max-w-7xl mx-auto grid gap-6 md:grid-cols-2">
+<div class="px-4 max-w-7xl mx-auto grid gap-6 md:grid-cols-2">
     {% for cat in cats %}
     <a href="{% url 'cat_detail' cat.pk %}">
         <div class="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col lg:flex-row">
