@@ -4,129 +4,66 @@
 
 {% block content %}
 <div class="bg-white shadow rounded-lg p-6">
-    <h1 class="text-3xl font-bold mb-4">{{ cat.name }}</h1>
-    {% if user.is_authenticated %}
-        <a href="{% url 'cat_edit' cat.pk %}"
-        class="inline-block mt-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">
-            Edit Cat Details
-        </a>
-    {% endif %}
-    <div 
-        x-data="{
+
+
+    <!-- Lightbox -->
+    <!-- <div x-data="{
             active: 0,
             lightbox: false,
-            images: [
-                {% for image in cat.images.all %}
-                {
-                    url: '{{ image.image.url }}',
-                    caption: '{{ image.caption|escapejs }}'
-                },
-                {% endfor %}
-            ],
-            next() { this.active = (this.active + 1) % this.images.length },
-            prev() { this.active = (this.active - 1 + this.images.length) % this.images.length },
-            leftIndex() { return (this.active - 1 + this.images.length) % this.images.length },
-            rightIndex() { return (this.active + 1) % this.images.length }
-        }"
-        class="relative max-w-3xl mx-auto select-none"
-        @keydown.window="
-            if ($event.key === 'ArrowRight') next();
-            if ($event.key === 'ArrowLeft') prev();
-        "
-    >
-
-        <!-- CAROUSEL WRAPPER -->
-        <div class="flex items-center justify-center gap-4">
-
-            <!-- LEFT BLURRED IMAGE -->
-            <div class="w-1/4">
-                <img 
-                    :src="images[leftIndex()].url"
-                    class="w-full h-64 object-contain opacity-40 blur-sm"
-                >
-            </div>
-
-            <!-- MAIN IMAGE (click to open lightbox) -->
-            <div 
-                class="w-2/4 relative"
-                @click="lightbox = true"
-                @touchstart="touchStart = $event.changedTouches[0].clientX"
-                @touchend="
-                    touchEnd = $event.changedTouches[0].clientX;
-                    if (touchEnd < touchStart - 50) next();
-                    if (touchEnd > touchStart + 50) prev();
-                "
-            >
-                <img 
-                    :src="images[active].url"
-                    class="w-full max-h-[600px] object-contain rounded shadow cursor-pointer"
-                >
-                <p class="text-center text-sm text-gray-600 mt-2" x-text="images[active].caption"></p>
-            </div>
-
-            <!-- RIGHT BLURRED IMAGE -->
-            <div class="w-1/4">
-                <img 
-                    :src="images[rightIndex()].url"
-                    class="w-full h-64 object-contain opacity-40 blur-sm"
-                >
-            </div>
-
-        </div>
-
-        <!-- NAV BUTTONS -->
-        <div class="flex justify-between mt-4">
-            <button 
-                @click="prev()"
-                class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-            >
-                ← Prev
-            </button>
-
-            <button 
-                @click="next()"
-                class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-            >
-                Next →
-            </button>
-        </div>
-
-        <!-- LIGHTBOX -->
-        <div 
-            x-show="lightbox"
-            x-transition
+        }">
+        <div x-show="lightbox" x-transition
             class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
-            @click.self="lightbox = false"
-        >
+            @click.self="lightbox = false">
             <div class="relative max-w-3xl w-full px-4">
-                <img 
-                    :src="images[active].url" 
-                    class="w-full max-h-[90vh] object-contain rounded"
-                >
-                <button 
-                    @click="lightbox = false"
-                    class="absolute top-4 right-4 text-white text-3xl"
-                >
+                <img :src="images[active].url" class="w-full max-h-[90vh] object-contain rounded">
+                <button @click="lightbox = false" class="absolute top-4 right-4 text-white text-3xl">
                     &times;
                 </button>
             </div>
         </div>
+    </div> -->
 
+    <!-- Back button -->
+    <a href="/cats/" class="bg-cyan-600 text-white px-4 py-1 rounded-full hover:bg-purple-700 text-sm">
+        <i class="fa-solid fa-angle-left"></i> Back
+    </a>
+
+    <!-- Edit Cat (if authenticated) -->
+    {% if user.is_authenticated %}
+    <a href="{% url 'cat_edit' cat.pk %}"
+        class="ml-2 mt-4 px-4 py-1 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 text-sm">
+        <i class="fa-solid fa-pen-to-square"></i> Edit
+    </a>
+    {% endif %}
+
+    <!-- Name -->
+    <h2 class="mt-4 w-full text-center md:text-left text-xl font-semibold text-purple-700">
+        <i class="fa-solid fa-heart"></i>
+        {{ cat.name }}
+        <i class="fa-solid fa-heart"></i>
+    </h2>
+
+
+    <div class="flex flex-col md:flex-row md:items-start md:space-x-4 mt-4">
+        <img src="{{ cat.primary_image.image.url }}" class="block max-h-[400px] object-cover rounded-lg shadow mb-4">
+        <div class="mt-4 md:mt-0 md:w-2/3 text-left">
+            <p><strong>Breed:</strong> {{ cat.breed }}</p>
+            <p><strong>Age:</strong> {{ cat.age }}</p>
+            <p><strong>Colour:</strong> {{ cat.colour }}</p>
+            <p><strong>Sex:</strong> {{ cat.get_sex_display }}</p>
+            <p><strong>Status:</strong> {{ cat.get_status_display }}</p>
+            <p><strong>Fostered In:</strong> {{ cat.fostered_in }}</p>
+        </div>
     </div>
 
-    <p><strong>Breed:</strong> {{ cat.breed }}</p>
-    <p><strong>Age:</strong> {{ cat.age }}</p>
-    <p><strong>Colour:</strong> {{ cat.colour }}</p>
-    <p><strong>Sex:</strong> {{ cat.get_sex_display }}</p>
-    <p><strong>Status:</strong> {{ cat.get_status_display }}</p>
-    <p><strong>Fostered In:</strong> {{ cat.fostered_in }}</p>
-
+    <!-- Main Description -->
     <div class="mt-4">
         <h2 class="text-xl font-semibold mb-2">Description</h2>
         <p>{{ cat.description|linebreaks }}</p>
     </div>
 
-    <div class="space-y-3">
+    <!-- Health and compatibility -->
+    <div class="mt-4 space-y-2 grid-cols-2">
         <!-- Vaccinated -->
         <div class="flex items-start gap-3">
             <span class="text-xl">
@@ -135,7 +72,7 @@
             <div>
                 <strong>Vaccinated</strong>
                 {% if cat.vaccinated_notes %}
-                    <p class="text-gray-600 text-sm">{{ cat.vaccinated_notes }}</p>
+                <p class="text-gray-600 text-sm">{{ cat.vaccinated_notes }}</p>
                 {% endif %}
             </div>
         </div>
@@ -168,7 +105,7 @@
             <div>
                 <strong>FIV Status</strong>
                 {% if cat.health_notes %}
-                    <p class="text-gray-600 text-sm">{{ cat.health_notes }}</p>
+                <p class="text-gray-600 text-sm">{{ cat.health_notes }}</p>
                 {% endif %}
             </div>
         </div>
@@ -181,7 +118,7 @@
             <div>
                 <strong>Good with kids</strong>
                 {% if cat.good_with_kids_notes %}
-                    <p class="text-gray-600 text-sm">{{ cat.good_with_kids_notes }}</p>
+                <p class="text-gray-600 text-sm">{{ cat.good_with_kids_notes }}</p>
                 {% endif %}
             </div>
         </div>
@@ -194,7 +131,7 @@
             <div>
                 <strong>Good with dogs</strong>
                 {% if cat.good_with_dogs_notes %}
-                    <p class="text-gray-600 text-sm">{{ cat.good_with_dogs_notes }}</p>
+                <p class="text-gray-600 text-sm">{{ cat.good_with_dogs_notes }}</p>
                 {% endif %}
             </div>
         </div>
@@ -207,11 +144,21 @@
             <div>
                 <strong>Good with cats</strong>
                 {% if cat.good_with_cats_notes %}
-                    <p class="text-gray-600 text-sm">{{ cat.good_with_cats_notes }}</p>
+                <p class="text-gray-600 text-sm">{{ cat.good_with_cats_notes }}</p>
                 {% endif %}
             </div>
         </div>
-
     </div>
+
+    <!-- Photo grid -->
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {% for img in cat.images.all %}
+        <div class="overflow-hidden">
+            <img class="h-full w-full object-cover rounded-lg shadow-lg" src="{{ img.image.url }}"
+                alt="{{ img.alt_text }}">
+        </div>
+        {% endfor %}
+    </div>
+
 </div>
 {% endblock %}
