@@ -34,7 +34,7 @@
 <body class="bg-gray-300 text-gray-900">
     <!-- NAVBAR -->
     <nav
-        class="fixed top-0 w-full z-50 transition-all duration-300 bg-purple-700 py-4 px-6 text-white flex items-center justify-between">
+        class="fixed top-0 w-full z-30 transition-all duration-300 bg-purple-700 py-4 px-6 text-white flex items-center justify-between">
 
         <!-- Logo and name -->
         <a href="/" class="flex items-center">
@@ -65,7 +65,7 @@
 
     <!-- Mobile Menu -->
     <div id="mobile-menu"
-        class="hidden md:hidden fixed mt-4 px-4 pt-2 pb-2 space-y-2 z-50 bg-purple-600 w-full text-white">
+        class="hidden md:hidden fixed mt-0 px-4 pt-2 pb-2 space-y-2 z-50 bg-purple-600 w-full text-white">
         <a href="/" class="block">Home</a>
         <a href="/about/" class="block">About Us</a>
         <a href="/cats/" class="block">Cats For Adoption</a>
@@ -84,7 +84,7 @@
     </script>
 
     <!-- MAIN CONTENT -->
-    <main class="max-w-6xl mx-auto my-24 px-4 py-8">
+    <main class="max-w-6xl mx-auto mt-28 mb-20 px-4 py-4">
         {% block content %}{% endblock %}
     </main>
 
@@ -99,7 +99,7 @@
             </form>
         </li>
         {% else %}
-        <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
+        <!-- <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li> -->
         {% endif %}
         <div class="max-w-6xl mx-auto px-4 text-center text-gray-600">
             <p>© {{ now|date:"Y" }} 9 Lives Cat Rescue - Giving rescue cats a chance at a second life</p>

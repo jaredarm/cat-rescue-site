@@ -3,26 +3,53 @@
 {% block title %}{{ cat.name }}{% endblock %}
 
 {% block content %}
+
+<script>
+    function lightbox({ images }) {
+        return {
+            images,
+            index: 0,
+            show: false,
+            startX: null,
+
+            open(i) {
+                this.index = i;
+                this.show = true;
+                document.body.classList.add('overflow-hidden');
+            },
+            close() {
+                this.show = false;
+                document.body.classList.remove('overflow-hidden');
+            },
+            next() {
+                this.index = (this.index + 1) % this.images.length;
+            },
+            prev() {
+                this.index = (this.index - 1 + this.images.length) % this.images.length;
+            },
+
+            touchStart(e) {
+                this.startX = e.touches[0].clientX;
+            },
+            touchEnd(e) {
+                let endX = e.changedTouches[0].clientX;
+                let diff = endX - this.startX;
+                if (Math.abs(diff) > 50) diff < 0 ? this.next() : this.prev();
+            },
+
+            init() {
+                window.addEventListener('keydown', (e) => {
+                    if (!this.show) return;
+                    if (e.key === 'ArrowRight') this.next();
+                    if (e.key === 'ArrowLeft') this.prev();
+                    if (e.key === 'Escape') this.close();
+                });
+            }
+        }
+    }
+</script>
+
 <div class="bg-white shadow rounded-lg p-6">
-
-
-    <!-- Lightbox -->
-    <!-- <div x-data="{
-            active: 0,
-            lightbox: false,
-        }">
-        <div x-show="lightbox" x-transition
-            class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
-            @click.self="lightbox = false">
-            <div class="relative max-w-3xl w-full px-4">
-                <img :src="images[active].url" class="w-full max-h-[90vh] object-contain rounded">
-                <button @click="lightbox = false" class="absolute top-4 right-4 text-white text-3xl">
-                    &times;
-                </button>
-            </div>
-        </div>
-    </div> -->
-
     <!-- Back button -->
     <a href="/cats/" class="bg-cyan-600 text-white px-4 py-1 rounded-full hover:bg-purple-700 text-sm">
         <i class="fa-solid fa-angle-left"></i> Back
@@ -148,17 +175,49 @@
                 {% endif %}
             </div>
         </div>
+        <!-- END: Health and compatibility -->
     </div>
 
-    <!-- Photo grid -->
-    <div class="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {% for img in cat.images.all %}
-        <div class="overflow-hidden">
-            <img class="h-full w-full object-cover rounded-lg shadow-lg" src="{{ img.image.url }}"
-                alt="{{ img.alt_text }}">
+
+    <!-- Lightbox -->
+    <div x-data="lightbox({ images: [
+            {% for img in cat.images.all %}
+                { url: '{{ img.image.url }}', alt: '{{ img.alt_text|default:"" }}' },
+            {% endfor %}
+        ] })">
+
+        <!-- Photo grid -->
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {% for img in cat.images.all %}
+            <div class="overflow-hidden">
+                <img class="h-full w-full object-cover rounded-lg shadow-lg cursor-pointer " src="{{ img.image.url }}"
+                    @click="open({{ forloop.counter0 }})" alt="{{ img.alt_text }}">
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
+        <!-- Lightbox -->
+        <div x-show="show" x-transition.opacity
+            class="fixed top-0 inset-0 bg-black/90 flex justify-center items-center pt-2 z-40" @click.self="close"
+            @touchstart="touchStart" @touchend="touchEnd">
 
+            <!-- Lightbox image -->
+            <img :src="images[index].url" :alt="images[index].alt" class="max-h-[80vh] max-w-[90vw] rounded-lg" />
+
+            <!-- Close button -->
+            <button
+                class="absolute top-3 right-0 z-50 flex h-16 p-4 w-1/12 cursor-pointer items-start justify-end text-3xl text-white bg-red-400"
+                @click="close"><i class="fa-solid fa-xmark"></i></button>
+
+            <!-- Left button -->
+            <button
+                class="absolute top-1/2 left-0 z-40 h-[80%] w-1/6 -translate-y-1/2  pl-4 text-left text-4xl text-white bg-green-400"
+                @click.stop="prev"><i class="fa-solid fa-angle-left"></i></button>
+
+            <!-- Right button -->
+            <button
+                class="absolute top-1/2 right-0 z-40 h-[80%] w-1/6 -translate-y-1/2 pr-4 text-right text-4xl text-white bg-green-400"
+                @click.stop="next"><i class="fa-solid fa-angle-right"></i></button>
+        </div>
+    </div>
 </div>
 {% endblock %}
