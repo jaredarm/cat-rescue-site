@@ -48,9 +48,6 @@ class CatAdmin(admin.ModelAdmin):
 
     search_fields = (
         'name',
-        'breed',
-        'breed_string',
-        'description',
         'microchip_number'
     )
 
@@ -110,4 +107,3 @@ class CatAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" style="height: 60px;" />', primary.image.url)
 
         return ""
-

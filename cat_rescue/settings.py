@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cats',
     'fosterhomes',
+    'adoptions',
 ]
 
 MIDDLEWARE = [

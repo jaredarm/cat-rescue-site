@@ -9,15 +9,37 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-    <!-- <script>
+    <!-- Shrink navbar on scroll -->
+    <script>
         // Shrink navbar on scroll
         window.addEventListener('scroll', () => {
             const nav = document.querySelector('nav');
-            nav.classList.toggle('bg-purple-900', window.scrollY > 50);
-            nav.classList.toggle('py-2', window.scrollY > 50);
-            nav.classList.toggle('py-4', window.scrollY <= 50);
+            const site_name = document.querySelector('#site_name');
+            const logo = document.querySelector('#logo');
+            const mobile_menu = document.querySelector('#mobile-menu');
+            const scroll_dist = 50;
+
+            // Nav bar size and colour
+            nav.classList.toggle('bg-purple-900', window.scrollY > scroll_dist);
+            nav.classList.toggle('py-1', window.scrollY > scroll_dist);
+            nav.classList.toggle('py-4', window.scrollY <= scroll_dist);
+            nav.classList.toggle('pl-1', window.scrollY > scroll_dist);
+            nav.classList.toggle('pl-4', window.scrollY <= scroll_dist);            
+
+            site_name.classList.toggle('text-md', window.scrollY > scroll_dist);
+            site_name.classList.toggle('text-xl',window.scrollY <= scroll_dist);
+            
+            // Logo height
+            logo.classList.toggle('h-10', window.scrollY > scroll_dist);
+            logo.classList.toggle('h-20', window.scrollY <= scroll_dist);
+
+            // Mobile menu placement and colour
+            mobile_menu.classList.toggle('bg-purple-800', window.scrollY > scroll_dist);
+            mobile_menu.classList.toggle('mt-12', window.scrollY > scroll_dist);
+            mobile_menu.classList.toggle('mt-28', window.scrollY <= scroll_dist);
+            
         });
-    </script> -->
+    </script>
 
 
     <!-- Alpine.js CDN -->
@@ -31,18 +53,18 @@
 
 </head>
 
-<body class="bg-gray-300 text-gray-900">
+<body class="min-h-screen flex flex-col bg-gray-300 text-gray-900">
     <!-- NAVBAR -->
     <nav
-        class="fixed top-0 w-full z-30 transition-all duration-300 bg-purple-700 py-4 px-6 text-white flex items-center justify-between">
+        class="fixed top-0 w-full z-30 bg-purple-700 py-4 pr-4 pl-4 text-white flex items-center justify-between">
 
         <!-- Logo and name -->
         <a href="/" class="flex items-center">
             <div class="flex">
-                <img class="h-20 w-auto rounded-md mr-2" src="{% static 'images/9lives_logo.webp' %}"
+                <img class="h-20 w-auto rounded-md mr-2" id="logo" src="{% static 'images/9lives_logo.webp' %}"
                     alt="9 Lives Cat Rescue Logo">
             </div>
-            <div class="text-white font-semibold text-xl">
+            <div id="site_name" class="text-white font-semibold text-xl">
                 9 Lives Cat Rescue
             </div>
         </a>
@@ -62,10 +84,9 @@
         </button>
     </nav>
 
-
     <!-- Mobile Menu -->
     <div id="mobile-menu"
-        class="hidden md:hidden fixed mt-0 px-4 pt-2 pb-2 space-y-2 z-50 bg-purple-600 w-full text-white">
+        class="fixed hidden md:hidden mt-28 px-6 pt-2 pb-2 space-y-4 z-50 bg-purple-600 w-full text-white">
         <a href="/" class="block">Home</a>
         <a href="/about/" class="block">About Us</a>
         <a href="/cats/" class="block">Cats For Adoption</a>
@@ -84,25 +105,15 @@
     </script>
 
     <!-- MAIN CONTENT -->
-    <main class="max-w-6xl mx-auto mt-28 mb-24 md:mb-20 p-4">
+    <main class="flex-grow w-full lg:max-w-7xl mx-auto mt-28 mb-2 p-4">
         {% block content %}{% endblock %}
     </main>
 
     <!-- FOOTER -->
-    <footer class="flex w-full bottom-0 fixed bg-white border-t py-6">
-
-        <div class="max-w-6xl mx-auto px-4 text-center text-gray-600">
+    <footer class="flex w-full bottom-0 bg-white border-t py-4">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-600">
             <p>© {{ now|date:"Y" }} 9 Lives Cat Rescue - Giving rescue cats a chance at a second life</p>
         </div>
-        {% if user.is_authenticated %}
-        <li>User: {{ user.get_username }}</li>
-        <li>
-            <form id="logout-form" method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-link">Logout</button>
-            </form>
-        </li>
-        {% endif %}
     </footer>
 
 </body>
