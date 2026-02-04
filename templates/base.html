@@ -84,12 +84,16 @@
     </script>
 
     <!-- MAIN CONTENT -->
-    <main class="max-w-6xl mx-auto mt-28 mb-20 px-4 py-4">
+    <main class="max-w-6xl mx-auto mt-28 mb-24 md:mb-20 p-4">
         {% block content %}{% endblock %}
     </main>
 
     <!-- FOOTER -->
     <footer class="flex w-full bottom-0 fixed bg-white border-t py-6">
+
+        <div class="max-w-6xl mx-auto px-4 text-center text-gray-600">
+            <p>© {{ now|date:"Y" }} 9 Lives Cat Rescue - Giving rescue cats a chance at a second life</p>
+        </div>
         {% if user.is_authenticated %}
         <li>User: {{ user.get_username }}</li>
         <li>
@@ -98,12 +102,7 @@
                 <button type="submit" class="btn btn-link">Logout</button>
             </form>
         </li>
-        {% else %}
-        <!-- <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li> -->
         {% endif %}
-        <div class="max-w-6xl mx-auto px-4 text-center text-gray-600">
-            <p>© {{ now|date:"Y" }} 9 Lives Cat Rescue - Giving rescue cats a chance at a second life</p>
-        </div>
     </footer>
 
 </body>

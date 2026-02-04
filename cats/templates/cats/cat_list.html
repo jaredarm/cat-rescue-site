@@ -3,7 +3,7 @@
 {% block title %}Cats for Adoption{% endblock %}
 {% block content %}
 
-<div class="px-4 max-w-7xl mx-auto grid gap-6 md:grid-cols-2">
+<div class="max-w-7xl mx-auto grid gap-4 md:grid-cols-2">
     {% for cat in cats %}
     <a href="{% url 'cat_detail' cat.pk %}">
         <div class="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col lg:flex-row">
@@ -38,11 +38,11 @@
 
             <img src="{{ cat.primary_image.image.url }}" alt="{{ cat.name }}"
                 class="w-full lg:w-1/3 object-cover h-64 lg:h-100 overflow-hidden" />
-            <div class="p-4 flex-1">
-                <h2 class="text-xl font-semibold text-cyan-600">
-                    <i class="fa-solid fa-heart text-purple-600"></i>
+            <div class="p-4 flex-1 text-purple-600">
+                <h2 class="text-xl font-semibold">
+                    <i class="fa-solid fa-heart"></i>
                     {{ cat.name }}
-                    <i class="fa-solid fa-heart text-purple-600"></i>
+                    <i class="fa-solid fa-heart"></i>
                 </h2>
 
                 <p class="text-gray-700 text-sm mb-2 mt-2">{{ cat.tagline }}</p>
