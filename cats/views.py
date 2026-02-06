@@ -12,7 +12,6 @@ class CatListView(ListView):
     model = Cat
     template_name = 'cats/cat_list.html'
     context_object_name = 'cats'
-    paginate_by = 10  # optional but very common
 
     def get_queryset(self):
         qs = Cat.objects.all()
@@ -69,6 +68,7 @@ class CatUpdateView(LoginRequiredMixin, UpdateView):
             return redirect("cat_detail", pk=self.object.pk)
 
         return self.form_invalid(form)    
+
 class CatCreateView(LoginRequiredMixin, CreateView):
     model = Cat
     form_class = CatForm

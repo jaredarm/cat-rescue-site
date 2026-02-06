@@ -5,7 +5,7 @@
 
 <div class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
     {% for cat in cats %}
-    <a href="{% url 'cat_detail' cat.pk %}">
+    <a href="{% url 'cat_detail' cat.pk %}" id="{{ cat.id }}">
         <div class="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col lg:flex-row">
 
             <!-- Floating icons -->

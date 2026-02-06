@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% block title %}9 Lives Cat Rescue - New Application{% endblock %}
+
+{% block content %}
+
+<form method="POST" enctype="multipart/form-data" class="space-y-10">
+    {% csrf_token %}
+
+    <!-- Section: Cat Details -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Cat Details</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block font-medium">Cats</label>
+                {{ form.cats }}
+            </div>
+
+            <div>
+                <label class="block font-medium">How did you find us?</label>
+                {{ form.how_found_cat }}
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block font-medium">Reason for adopting</label>
+                {{ form.reason_for_adopting }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Contact Details -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Contact Details</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block font-medium">First Name</label>
+                {{ form.first_name }}
+            </div>
+            <div>
+                <label class="block font-medium">Family Name</label>
+                {{ form.family_name }}
+            </div>
+
+            <div>
+                <label class="block font-medium">Email</label>
+                {{ form.email }}
+            </div>
+            <div>
+                <label class="block font-medium">Phone</label>
+                {{ form.phone }}
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block font-medium">Occupation</label>
+                {{ form.occupation }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Address -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Address</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="md:col-span-2">
+                <label class="block font-medium">Address Line 1</label>
+                {{ form.address_line1 }}
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block font-medium">Address Line 2</label>
+                {{ form.address_line2 }}
+            </div>
+
+            <div>
+                <label class="block font-medium">City</label>
+                {{ form.city }}
+            </div>
+            <div>
+                <label class="block font-medium">State</label>
+                {{ form.state }}
+            </div>
+            <div>
+                <label class="block font-medium">Postal Code</label>
+                {{ form.postal_code }}
+            </div>
+            <div>
+                <label class="block font-medium">Country</label>
+                {{ form.country }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Household -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Household</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block font-medium">Accommodation Type</label>
+                {{ form.accommodation_type }}
+            </div>
+
+            <div>
+                <label class="block font-medium">Number of People</label>
+                {{ form.number_of_people }}
+            </div>
+
+            <div>
+                <label class="block font-medium">Children & Ages</label>
+                {{ form.children_and_ages }}
+            </div>
+
+            <div>
+                <label class="block font-medium">Hours Alone</label>
+                {{ form.hours_alone }}
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block font-medium">Home Photos</label>
+                {{ form.home_photos }}
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block font-medium">Additional Home Info</label>
+                {{ form.home_additional_info }}
+            </div>
+
+            <!-- Boolean checkboxes -->
+            <div class="md:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <label class="flex items-center space-x-2">{{ form.busy_street }} <span>Busy Street</span></label>
+                <label class="flex items-center space-x-2">{{ form.allergies }} <span>Allergies</span></label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Other Pets -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Other Pets</h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <label class="flex items-center space-x-2">{{ form.other_pets_cat }} <span>Cats</span></label>
+            <label class="flex items-center space-x-2">{{ form.other_pets_dog }} <span>Dogs</span></label>
+            <label class="flex items-center space-x-2">{{ form.other_pets_rabbit }} <span>Rabbits</span></label>
+            <label class="flex items-center space-x-2">{{ form.other_pets_other }} <span>Other</span></label>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+            <label class="flex items-center space-x-2">{{ form.other_pets_microchipped }} <span>Microchipped</span></label>
+            <label class="flex items-center space-x-2">{{ form.other_pets_sterilised }} <span>Sterilised</span></label>
+            <label class="flex items-center space-x-2">{{ form.other_pets_vaccinated }} <span>Vaccinated</span></label>
+        </div>
+
+        <div class="mt-6">
+            <label class="block font-medium">Behaviour Notes</label>
+            {{ form.other_pet_behaviour }}
+        </div>
+
+        <div class="mt-6">
+            <label class="block font-medium">Additional Info</label>
+            {{ form.other_pet_additional_info }}
+        </div>
+    </div>
+
+    <!-- Section: Experience -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Previous Experience</h2>
+
+        <div class="space-y-4">
+            {{ form.previous_cat_experience }}
+            {{ form.medical_care_plan }}
+            {{ form.lost_cat_plan }}
+            {{ form.diet_plan }}
+            {{ form.surrendered_animals_history }}
+            {{ form.adoption_refusal_history }}
+        </div>
+    </div>
+
+    <!-- Section: Declarations -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Declarations</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <label class="flex items-center space-x-2">{{ form.indoor_only }} <span>Indoor Only</span></label>
+            <label class="flex items-center space-x-2">{{ form.can_afford_care }} <span>Can Afford Care</span></label>
+            <label class="flex items-center space-x-2">{{ form.will_return_if_needed }} <span>Will Return if Needed</span></label>
+        </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="text-center">
+        <button class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+            Submit Application
+        </button>
+    </div>
+</form>
+{% endblock %}

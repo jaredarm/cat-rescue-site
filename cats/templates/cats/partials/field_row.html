@@ -49,14 +49,14 @@
                 const el = document.getElementById("{{ field.id_for_label }}");
                 if (el) {
                     el.classList.add(
-                        "w-full", "rounded-md", "border-gray-300",
+                        "p-2", "w-full", "rounded-md", "border-gray-300",
                         "shadow-sm", "focus:border-blue-500",
                         "focus:ring-blue-500"
                     );
                 }
             })();
         </script>
-
+        
         {% if field.help_text %}
             <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
         {% endif %}
@@ -65,7 +65,6 @@
             <p class="text-red-600 text-sm mt-1">{{ field.errors|striptags }}</p>
         {% endif %}
     </div>
-
 </div>
 
 {% endif %}
