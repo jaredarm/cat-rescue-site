@@ -1,7 +1,236 @@
 {% extends "base.html" %}
-
-{% block title %}9 Lives Cat Rescue - {{ application.full_name }}{% endblock %}
-
 {% block content %}
-<h1>{{ application.full_name }}</h1>
+
+<div class="bg-white rounded-lg p-6 max-w-4xl mx-auto">
+    <a href="/adoptions/#{{ application.id }}" class="bg-cyan-600 text-white px-4 py-1 rounded-full hover:bg-purple-700 text-sm">
+        <i class="fa-solid fa-angle-left"></i> Back
+    </a>
+    <h1 class="text-3xl font-bold mb-6 mt-4">
+        Application: {{ application.full_name }}
+    </h1>
+    <!-- CAT DETAILS -->
+    <h1 class="text-xl border-b">CAT DETAILS</h1>
+    <section>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Cats applied for</div>
+            <div class="md:col-span-2 text-gray-900">
+                {% for cat in application.cats.all %}
+                {{ cat.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                None selected
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Why would you like to adopt your chosen cat or cats?</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.reason_for_adopting }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">How did you find your chosen cat?</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.get_how_found_cat_display }}</div>
+        </div>
+    </section>
+
+
+    <!-- CONTACT -->
+    <h1 class="text-xl border-b">CONTACT DETAILS</h1>
+    <section>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">First name</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.first_name }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Family name</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.family_name }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Address</div>
+            <div class="md:col-span-2 text-gray-900 whitespace-pre-line">
+                {{ application.address_line1 }}
+                {% if application.address_line2 %}{{ application.address_line2 }}{% endif %}
+                {{ application.city }}, {{ application.state }} {{ application.postal_code }}
+                {{ application.country }}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Email</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.email }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Phone</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.phone }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Occupation</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.occupation }}</div>
+        </div>
+    </section>
+
+    <!-- HOUSEHOLD -->
+    <h1 class="text-xl border-b">HOUSEHOLD</h1>
+    <section>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Accommodation type</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.get_accommodation_type_display }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Do you live on a busy street?</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.busy_street|yesno:"Yes,No" }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Is anyone allergic to cats?</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.allergies|yesno:"Yes,No" }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Number of people in home</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.number_of_people }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Children and ages</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.children_and_ages }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Hours cat will be alone</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.hours_alone }}</div>
+        </div>
+
+        {% if application.home_photos %}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Home photos</div>
+            <div class="md:col-span-2 text-gray-900">
+                <a href="{{ application.home_photos.url }}" class="text-purple-700 underline" target="_blank">
+                    View uploaded file
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Additional home info</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.home_additional_info }}</div>
+        </div>
+    </section>
+
+    <!-- OTHER PETS -->
+    <h1 class="text-xl border-b">OTHER PETS</h1>
+    <section>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Other pets: Cats</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.other_pets_cat|yesno:"Yes,No" }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Other pets: Dogs</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.other_pets_dog|yesno:"Yes,No" }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Other pets: Rabbits</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.other_pets_rabbit|yesno:"Yes,No" }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Other pets: Other</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.other_pets_other|yesno:"Yes,No" }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Microchipped</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.other_pets_microchipped|yesno:"Yes,No" }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Sterilised</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.other_pets_sterilised|yesno:"Yes,No" }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Vaccinated</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.other_pets_vaccinated|yesno:"Yes,No" }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Behaviour issues</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.other_pet_behaviour }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Additional pet info</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.other_pet_additional_info }}</div>
+        </div>
+    </section>
+
+    <!-- PREVIOUS EXPERIENCE -->
+    <h1 class="text-xl border-b">PREVIOUS EXPERIENCE</h1>
+    <section>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Previous cat experience</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.previous_cat_experience }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Medical care plan</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.medical_care_plan }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Lost cat plan</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.lost_cat_plan }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Diet plan</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.diet_plan }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Surrender history</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.surrendered_animals_history }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Adoption refusal history</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.adoption_refusal_history }}</div>
+        </div>
+    </section>
+
+    <!-- DECLARATIONS -->
+    <h1 class="text-xl border-b">DECLARATIONS</h1>
+    <section>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Indoor only</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.indoor_only|yesno:"Yes,No" }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Can afford care</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.can_afford_care|yesno:"Yes,No" }}</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+            <div class="font-semibold text-gray-700">Will return if needed</div>
+            <div class="md:col-span-2 text-gray-900">{{ application.will_return_if_needed|yesno:"Yes,No" }}</div>
+        </div>
+    </section>
+
+    <!--  -->
+    <section>
+        <h1 class="text-xl"></h1>
+    </section>
+
+</div>
+
 {% endblock %}

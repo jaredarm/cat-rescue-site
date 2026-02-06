@@ -20,7 +20,7 @@ class Application(models.Model):
     ]
 
     ACCOMMODATION_CHOICES = [
-        ("home_owner", "Home ownder"),
+        ("home_owner", "Home owner"),
         ("renting", "Renting on your own or with a partner"),
         ("house_share", "House sharing"),
         ("other", "Other"),

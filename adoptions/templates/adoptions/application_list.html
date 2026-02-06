@@ -2,14 +2,35 @@
 {% block title %}9 Lives Cat Rescue - Applications{% endblock %}
 {% block content %}
 <h1 class="text-xl mb-4">Applications</h1>
-<div class="flex flex-col">
+
+<h1>FILTER</h1>
+<form method="get" class="mb-6 flex items-center gap-4">
+
+    <select name="status" class="border rounded shadow px-3 py-2" onchange="this.form.submit()">
+        <option value="">All</option>
+        {% for value, label in status_choices %}
+        <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>
+            {{ label }}
+        </option>
+        {% endfor %}
+    </select>
+
+    {% if current_status %}
+    <a href="{% url 'application_list' %}" class="text-sm text-purple-700 underline">
+        Clear filter
+    </a>
+    {% endif %}
+</form>
+
+<div class="flex flex-col space-y-1">
     {% for application in applications %}
-    <div class="flex flex-col md:grid md:grid-cols-6 p-4 relative bg-white rounded-lg shadow-md">
-        {{ application.full_name }}
+    <div class="flex flex-col md:items-center md:grid md:grid-cols-6 p-4 relative bg-white rounded-lg shadow ">
         <div>
-            Cats:
+            {{ application.full_name }}
+        </div>
+        <div>
             {% for cat in application.cats.all %}
-            {{ cat.name }}
+            <span class="bg-purple-400 px-2 py-1 text-xs text-white rounded-full">{{ cat.name }}</span>
             {% endfor %}
         </div>
         <div>
@@ -21,7 +42,8 @@
         <div>
             {{ application.submitted_at }}
         </div>
-        <a href="{% url 'application_detail' application.pk %}" class="text-center rounded-full bg-purple-600 text-white">
+        <a href="{% url 'application_detail' application.pk %}"
+            class="w-auto h-auto text-center rounded-full bg-purple-600 text-white text-md py-1 px-2">
             View
         </a>
     </div>

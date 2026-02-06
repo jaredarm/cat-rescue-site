@@ -20,7 +20,22 @@ class ApplicationListView(LoginRequiredMixin, ListView):
     context_object_name = 'applications'
 
     def get_queryset(self):
-        return Application.objects.all()
+        queryset = super().get_queryset()
+        status = self.request.GET.get("status")
+        if status:
+            queryset = queryset.filter(status=status)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Pass the current filter + all statuses to the template
+        context["current_status"] = self.request.GET.get("status", "")
+        context["status_choices"] = Application._meta.get_field(
+            "status").choices
+
+        return context
 
 
 # Detail view of application - logged in only

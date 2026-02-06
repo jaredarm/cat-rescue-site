@@ -128,7 +128,7 @@
     </div>
 
     <!-- Health and compatibility -->
-    <div class="mt-4 space-y-2 grid-cols-2">
+    <div class="my-4 flex flex-col md:space-y-2 md:grid md:grid-cols-2">
         <!-- Vaccinated -->
         <div class="flex items-start gap-3">
             <span class="text-xl">
@@ -213,7 +213,13 @@
                 {% endif %}
             </div>
         </div>
-        <!-- END: Health and compatibility -->
+    </div>
+    <div class="flex flex-row w-full justify-center">
+        <a href="/adoptions/add">
+            <span class="w-full bg-purple-700 text-white font-extrabold text-xl rounded-full py-2 px-4">
+                Apply Now
+            </span>
+        </a>
     </div>
 </div>
 {% endblock %}
