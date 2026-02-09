@@ -27,7 +27,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('cats/', include('cats.urls')),
     path('adoptions/', include('adoptions.urls')),
-
+    path('vets/', include('vets.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}9 Lives Cat Rescue - Our Vets{% endblock %}
+{% block content %}
+
+<div class="p-4 mb-4 bg-white w-full rounded-lg">
+    <h1 class="text-2xl mb-4 font-bold">Our Vets</h1>
+
+    <h1 class="text-lg font-bold">Vets that Support Us</h1>
+    <p>We are so grateful for these wonderful vets that help us each and every day.</p>
+</div>
+
+<div class="grid grid-cols-1 w-full gap-4 md:grid-cols-2 lg:grid-cols-3">
+    {% for vet in vets %}
+    <div class="flex flex-col w-full items-center md:grid md:grid-cols-3 p-4 bg-white rounded-lg shadow">
+        <div class=""><img src="{{ vet.logo.url }}" class="w-full h-auto max-h-48"></div>
+        <div class="col-span-2 pl-4 overflow-hidden">
+            <p class="font-semibold text-lg">{{ vet.name }}</p>
+            <p>{{ vet.address_line1 }}, {{ vet.city }} {{ vet.state }} {{ vet.postal_code }}</p>
+            <p>{{ vet.phone }}</p>
+            <p><a href="{{ vet.website }}" class="underline cursor-pointer" target="_blank">Website</a></p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
