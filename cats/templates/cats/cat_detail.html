@@ -2,6 +2,11 @@
 
 {% block title %}9 Lives Cat Rescue - {{ cat.name }}{% endblock %}
 
+{% block admin_panel %}
+<a href="{% url 'cat_edit' cat.pk %}" class="px-4 py-1 bg-yellow-500 text-sm rounded-full">
+    <i class="fa-solid fa-pen-to-square mr-2"></i>Edit Cat</a>
+{% endblock %}
+
 {% block content %}
 
 <script>

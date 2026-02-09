@@ -1,5 +1,5 @@
 from urllib import request
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
@@ -47,37 +47,37 @@ class CatDetailView(DetailView):
 class CatUpdateView(LoginRequiredMixin, UpdateView):
     model = Cat
     form_class = CatForm
-    template_name = "cats/cat_edit.html"
+    template_name = "cats/cat_form.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context["image_formset"] = CatImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
-        else:
-            context["image_formset"] = CatImageFormSet(instance=self.object)
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     if self.request.POST:
+    #         context["image_formset"] = CatImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
+    #     else:
+    #         context["image_formset"] = CatImageFormSet(instance=self.object)
+    #     return context
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        image_formset = context["image_formset"]
+    # def form_valid(self, form):
+    #     context = self.get_context_data()
+    #     image_formset = context["image_formset"]
 
-        if image_formset.is_valid():
-            self.object = form.save()
-            image_formset.instance = self.object
-            image_formset.save()
-            return redirect("cat_detail", pk=self.object.pk)
+    #     if image_formset.is_valid():
+    #         self.object = form.save()
+    #         image_formset.instance = self.object
+    #         image_formset.save()
+    #         return redirect("cat_detail", pk=self.object.pk)
 
-        return self.form_invalid(form)    
+    #     return self.form_invalid(form)    
 
 class CatCreateView(LoginRequiredMixin, CreateView):
     model = Cat
     form_class = CatForm
-    template_name = "cats/cat_add.html"
+    template_name = "cats/cat_form.html"
 
     def get_success_url(self):
         return reverse_lazy("cat_detail", kwargs={"pk": self.object.pk})
     
 class CatDeleteView(LoginRequiredMixin, DeleteView):
     model = Cat
-    template_name = "cats/cat_confirm_delete.html"
+    template_name = "cat_confirm_delete.html"
     success_url = reverse_lazy("cat_list")

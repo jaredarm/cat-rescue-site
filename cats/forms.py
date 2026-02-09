@@ -1,8 +1,10 @@
 from django import forms
 from django.forms import inlineformset_factory
 from .models import Cat, CatImage
+from core.forms import TailwindModelForm
 
-class CatForm(forms.ModelForm):
+
+class CatForm(TailwindModelForm):
     class Meta:
         model = Cat
         fields = "__all__"

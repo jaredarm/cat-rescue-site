@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}9 Lives Cat Rescue - New Application{% endblock %}
+
+{% block content %}
+
+<form method="POST" enctype="multipart/form-data" class="space-y-10">
+    {% csrf_token %}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for field in form %}
+        <div>
+            <label class="font-semibold">
+                {{ field.label }}
+            </label>
+
+            {{ field }}
+
+            {% if field.help_text %}
+            <p class="text-sm text-gray-500">{{ field.help_text }}</p>
+            {% endif %}
+            {% for error in field.errors %}
+            <p class="text-red-600 text-sm">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="flex gap-4">
+        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Add
+        </button>
+
+        <a href="{% url 'cat_list' %}" class="px-4 py-2 bg-gray-500 rounded text-white hover:bg-gray-600">
+            Cancel
+        </a>
+    </div>
+
+</form>
+{% endblock %}

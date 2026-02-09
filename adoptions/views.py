@@ -1,6 +1,5 @@
-from django.shortcuts import render
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
-from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from .models import Application
 from .forms import ApplicationForm
@@ -10,7 +9,22 @@ from .forms import ApplicationForm
 class ApplicationCreateView(CreateView):
     model = Application
     form_class = ApplicationForm
-    template_name = "adoptions/application_add.html"
+    template_name = 'adoptions/application_form.html'
+
+
+# Edit an applications form
+class ApplicationUpdateView(LoginRequiredMixin, UpdateView):
+    model = Application
+    form_class = ApplicationForm
+    template_name = 'adoptions/application_form.html'
+    success_url = reverse_lazy("application_list")
+
+
+# Delete an application
+class ApplicationDeleteView(LoginRequiredMixin, DeleteView):
+    model = Application
+    template_name = 'confirm_delete.html'
+    success_url = reverse_lazy("application_list")
 
 
 # List view - logged in only

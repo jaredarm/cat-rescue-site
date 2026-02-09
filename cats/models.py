@@ -103,27 +103,50 @@ class Cat(models.Model):
         if (today.month, today.day) < (dob.month, dob.day):
             years -= 1
 
-        # Calculate months
-        months = today.month - dob.month
+        # Calculate total months difference
+        total_months = (today.year - dob.year) * 12 + (today.month - dob.month)
         if today.day < dob.day:
-            months -= 1
-        if months < 0:
-            months += 12
+            total_months -= 1
 
-        # Build the base age string
-        parts = []
-        if years > 0:
-            parts.append(f"{years} year{'s' if years != 1 else ''}")
-        if months > 0:
-            parts.append(f"{months} month{'s' if months != 1 else ''}")
+        # If under 1 year → show months only
+        if years < 1:
+            months = total_months
+            return f"{months} month{'s' if months != 1 else ''}"
 
-        age_str = ", ".join(parts) if parts else "0 months"
+        # If 1 year or older → show years only
+        return f"{years} year{'s' if years != 1 else ''}"
 
-        # Add estimated tag
-        # if self.estimated_dob:
-        #     age_str += " (estimated)"
+    @property
+    def age_years_decimal(self):
+        if not self.date_of_birth:
+            return None  # or 0, depending on your preference
 
-        return age_str
+        today = date.today()
+        dob = self.date_of_birth
+
+        # Total months difference
+        total_months = (today.year - dob.year) * 12 + (today.month - dob.month)
+        if today.day < dob.day:
+            total_months -= 1
+
+        # Convert months → years as decimal
+        return total_months / 12
+
+    # If the cat is less than 1 year old, it is a kitten
+    @property
+    def is_kitten(self):
+        if not self.date_of_birth:
+            return None
+
+        return self.age_years_decimal < 1
+
+    @property
+    def is_senior(self):
+        if not self.date_of_birth:
+            return None
+
+        return self.age_years_decimal >= 8
+
 
     # Primary image, returns the primary CatImage if exists
     @property
