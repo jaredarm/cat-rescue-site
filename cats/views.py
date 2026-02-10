@@ -1,10 +1,10 @@
-from urllib import request
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from .models import Cat
-from .forms import CatForm, CatImageFormSet
+from .forms import CatForm, CatImage, CatImageForm
 
 queryset = Cat.objects.prefetch_related('images')
 
@@ -49,25 +49,9 @@ class CatUpdateView(LoginRequiredMixin, UpdateView):
     form_class = CatForm
     template_name = "cats/cat_form.html"
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     if self.request.POST:
-    #         context["image_formset"] = CatImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
-    #     else:
-    #         context["image_formset"] = CatImageFormSet(instance=self.object)
-    #     return context
+    def get_success_url(self):
+        return reverse_lazy("cat_detail", kwargs={"pk": self.object.pk})
 
-    # def form_valid(self, form):
-    #     context = self.get_context_data()
-    #     image_formset = context["image_formset"]
-
-    #     if image_formset.is_valid():
-    #         self.object = form.save()
-    #         image_formset.instance = self.object
-    #         image_formset.save()
-    #         return redirect("cat_detail", pk=self.object.pk)
-
-    #     return self.form_invalid(form)    
 
 class CatCreateView(LoginRequiredMixin, CreateView):
     model = Cat
@@ -81,3 +65,43 @@ class CatDeleteView(LoginRequiredMixin, DeleteView):
     model = Cat
     template_name = "cat_confirm_delete.html"
     success_url = reverse_lazy("cat_list")
+
+
+def manage_cat_photos(request, cat_id):
+    cat = get_object_or_404(Cat, id=cat_id)
+    images = cat.images.all().order_by("-primary", "-uploaded_at")
+
+    if request.method == "POST":
+        form = CatImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_image = form.save(commit=False)
+            new_image.cat = cat
+            new_image.save()
+            return redirect(reverse("manage_cat_photos", args=[cat.id]))
+    else:
+        form = CatImageForm()
+
+    return render(request, "cats/manage_photos.html", {
+        "cat": cat,
+        "images": images,
+        "form": form,
+    })
+
+
+def update_cat_image(request, image_id):
+    image = get_object_or_404(CatImage, id=image_id)
+    cat = image.cat
+
+    if request.method == "POST":
+        form = CatImageForm(request.POST, request.FILES, instance=image)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse("manage_cat_photos", args=[cat.id]))
+
+    return redirect(reverse("manage_cat_photos", args=[cat.id]))
+
+def delete_cat_image(request, image_id):
+    image = get_object_or_404(CatImage, id=image_id)
+    cat_id = image.cat.id
+    image.delete()
+    return redirect(reverse("manage_cat_photos", args=[cat_id]))

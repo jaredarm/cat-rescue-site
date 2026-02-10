@@ -13,10 +13,8 @@ class CatForm(TailwindModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-CatImageFormSet = inlineformset_factory(
-    Cat,
-    CatImage,
-    fields=["image", "caption", "primary"],
-    extra=1,
-    can_delete=True
-)
+
+class CatImageForm(forms.ModelForm):
+    class Meta:
+        model = CatImage
+        fields = ["image", "caption", "primary"]

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}9 Lives Cat Rescue - {{ cat.name }}{% endblock %}
+{% block content %}
+
+<h1 class="text-2xl font-bold mb-4">
+    Manage Photos for {{ cat.name }}
+</h1>
+
+<!-- Upload new photo -->
+<div class="mb-6 p-4 border rounded bg-gray-50">
+    <h2 class="font-semibold mb-2">Add New Photo</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="px-4 py-2 bg-blue-600 text-white rounded">Upload</button>
+    </form>
+</div>
+
+<!-- Existing photos -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    {% for img in images %}
+    <div class="border rounded p-2 bg-white shadow">
+        <img src="{{ img.image.url }}" class="w-full h-40 object-cover rounded">
+
+        <form method="POST" action="{% url 'update_cat_image' img.id %}" class="mt-2">
+            {% csrf_token %}
+            <input type="text" name="caption" value="{{ img.caption }}" class="w-full border rounded p-1 mb-2">
+
+            <label class="flex items-center space-x-2 mb-2">
+                <input type="checkbox" name="primary" {% if img.primary %}checked{% endif %}>
+                <span>Primary</span>
+            </label>
+
+            <button class="px-3 py-1 bg-green-600 text-white rounded">Save</button>
+        </form>
+
+        <form method="POST" action="{% url 'delete_cat_image' img.id %}" class="mt-2">
+            {% csrf_token %}
+            <button class="px-3 py-1 bg-red-600 text-white rounded" onclick="return confirm('Delete this photo?')">
+                Delete
+            </button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
