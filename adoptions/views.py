@@ -10,6 +10,14 @@ class ApplicationCreateView(CreateView):
     model = Application
     form_class = ApplicationForm
     template_name = 'adoptions/application_form.html'
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        # Support pre-selecting cats via query params: ?cats=1&cats=2
+        cats = self.request.GET.getlist('cats')
+        if cats:
+            initial['cats'] = cats
+        return initial
 
 
 # Edit an applications form

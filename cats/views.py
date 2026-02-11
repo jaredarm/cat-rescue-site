@@ -151,13 +151,35 @@ def search_cats(request):
     results = []
 
     if q:
-        cats = Cat.objects.filter(name__icontains=q)[:10]
-        results = [{"id": c.id, "name": c.name} for c in cats]
+        cats = Cat.objects.filter(name__icontains=q).prefetch_related('bonded_cats')[:10]
+        results = [
+            {
+                "id": c.id,
+                "name": c.name,
+                "status": c.status,
+                "bonded_cats": list(c.bonded_cats.values_list("id", flat=True)),
+                "primary_image": (c.primary_image.image.url if c.primary_image else None),
+                "fostered_in": c.fostered_in,
+                "age": c.age,
+            }
+            for c in cats
+        ]
 
     return JsonResponse(results, safe=False)
 
 def get_cats_by_ids(request):
     ids = request.GET.getlist("ids[]", [])
-    cats = Cat.objects.filter(id__in=ids)
-    data = [{"id": c.id, "name": c.name} for c in cats]
+    cats = Cat.objects.filter(id__in=ids).prefetch_related('bonded_cats')
+    data = [
+        {
+            "id": c.id,
+            "name": c.name,
+            "status": c.status,
+            "bonded_cats": list(c.bonded_cats.values_list("id", flat=True)),
+            "primary_image": (c.primary_image.image.url if c.primary_image else None),
+            "fostered_in": c.fostered_in,
+            "age": c.age,
+        }
+        for c in cats
+    ]
     return JsonResponse(data, safe=False)
