@@ -6,6 +6,10 @@
     {% csrf_token %}
 
     {% for field in form %}
+    {% if field.name == "bonded_cats" %}
+    {% include "cats/widgets/bonded_cats_widget.html" %}
+    {% else %}
+
     <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">
             {{ field.label }}
@@ -17,13 +21,68 @@
         <p class="text-sm text-red-600 mt-1">{{ error }}</p>
         {% endfor %}
     </div>
+    {% endif %}
     {% endfor %}
 
     <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
         Save
     </button>
-    <a href="{% url 'cat_list' %}" class="px-4 py-2 bg-gray-500 rounded text-white hover:bg-gray-600">
+    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+        onclick="window.history.back()">
         Cancel
-    </a>
+    </button>
 </form>
+<script>
+    function bondedCatsComponent(catId, initialSelected) {
+        return {
+            query: "",
+            results: [],
+            selected: [],
+            selectedIds: [],
+
+            init() {
+                if (initialSelected.length > 0) {
+                    fetch(`/cats/get-by-ids/?` + new URLSearchParams(initialSelected.map(id => ['ids[]', id])))
+                        .then(r => r.json())
+                        .then(data => {
+                            this.selected = data;
+                            this.selectedIds = initialSelected;
+                        });
+                }
+            },
+
+            search() {
+                if (this.query.length < 2) {
+                    this.results = [];
+                    return;
+                }
+
+                fetch(`/cats/search/?q=${this.query}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        // Exclude already selected
+                        this.results = data.filter(c => !this.selectedIds.includes(c.id));
+                    });
+            },
+
+            add(cat) {
+                // Prevent selecting the cat itself
+                if (cat.id === catId) {
+                    return;
+                }
+
+                this.selected.push(cat);
+                this.selectedIds.push(cat.id);
+                this.results = [];
+                this.query = "";
+            },
+
+            remove(id) {
+                this.selected = this.selected.filter(c => c.id !== id);
+                this.selectedIds = this.selectedIds.filter(x => x !== id);
+            }
+        }
+    }
+</script>
+
 {% endblock %}

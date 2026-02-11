@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
 
+
 class Cat(models.Model):
     # Cat status choices
     STATUS_CHOICES = [
@@ -18,7 +19,7 @@ class Cat(models.Model):
     ]
 
     # Basic information
-    name = models.CharField(max_length=100)   
+    name = models.CharField(max_length=100)
     date_of_birth = models.DateField(null=True, blank=True)
     estimated_dob = models.BooleanField(default=False)
     breed = models.ForeignKey(
@@ -43,14 +44,17 @@ class Cat(models.Model):
     description = models.TextField(blank=True)
 
     # Health and compatibility
+    is_special_needs = models.BooleanField(default=False)
+    special_needs_notes = models.CharField(blank=True)
+
     is_vaccinated = models.BooleanField(default=False)
     vaccinated_notes = models.CharField(blank=True)
-    
+
     is_microchipped = models.BooleanField(default=False)
     microchip_number = models.CharField(max_length=50, blank=True)
 
     is_sterilised = models.BooleanField(default=False)
-    
+
     is_fiv_positive = models.BooleanField(default=False)
     health_notes = models.CharField(blank=True)
 
@@ -63,19 +67,13 @@ class Cat(models.Model):
     is_good_with_cats = models.BooleanField(default=False)
     good_with_cats_notes = models.CharField(blank=True)
 
-    # Sex
     sex = models.CharField(
-        max_length=20, 
+        max_length=20,
         choices=SEX_CHOICES,
         default='unknown'
     )
 
-    # Bonded cats
-    bonded_cats = models.ManyToManyField(
-        'self',
-        symmetrical=True,
-        blank=True
-    )
+    bonded_cats = models.ManyToManyField('self', symmetrical=True, blank=True)
 
     # Admin + internal notes
     created_at = models.DateTimeField(auto_now_add=True)
@@ -147,32 +145,58 @@ class Cat(models.Model):
 
         return self.age_years_decimal >= 8
 
-
     # Primary image, returns the primary CatImage if exists
     @property
     def primary_image(self):
         return self.images.filter(primary=True).first()
 
+    @property
+    def bonded_partners_display(self):
+        partners = self.bonded_cats.all()
+        if not partners:
+            return ""
+        return ", ".join(partner.name for partner in partners)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        # Add missing reverse bonds
+        for partner in self.bonded_cats.all():
+            if not partner.bonded_cats.filter(id=self.id).exists():
+                partner.bonded_cats.add(self)
+
+        # Remove stale reverse bonds
+        for partner in Cat.objects.filter(bonded_cats=self).exclude(id__in=self.bonded_cats.all()):
+            partner.bonded_cats.remove(self)
+
     # String representation
     def __str__(self):
         return self.name
 
+
 # Additional model for Cat Images
 class CatImage(models.Model):
-    cat = models.ForeignKey('Cat', on_delete=models.CASCADE, related_name='images')
+    cat = models.ForeignKey(
+        'Cat', on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='cats/')
     caption = models.CharField(max_length=200, blank=True)
     primary = models.BooleanField(default=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', '-uploaded_at']
 
     def __str__(self):
         return f"Image for {self.cat.name}"
-    
+
     def save(self, *args, **kwargs):
         # If this image is marked primary, unset all others for the same cat
         if self.primary:
-            CatImage.objects.filter(cat=self.cat, primary=True).exclude(id=self.id).update(primary=False)
+            CatImage.objects.filter(cat=self.cat, primary=True).exclude(
+                id=self.id).update(primary=False)
         super().save(*args, **kwargs)
+
 
 # Additional model for Cat Breed
 class CatBreed(models.Model):

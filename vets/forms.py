@@ -1,5 +1,5 @@
 from .models import Vet
-from core.forms import TailwindModelForm
+from common.forms import TailwindModelForm
 
 
 class VetForm(TailwindModelForm):

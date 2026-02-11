@@ -3,45 +3,101 @@
 {% block title %}9 Lives Cat Rescue - {{ cat.name }}{% endblock %}
 {% block content %}
 
-<h1 class="text-2xl font-bold mb-4">
-    Manage Photos for {{ cat.name }}
-</h1>
-
 <!-- Upload new photo -->
-<div class="mb-6 p-4 border rounded bg-gray-50">
-    <h2 class="font-semibold mb-2">Add New Photo</h2>
-    <form method="POST" enctype="multipart/form-data">
+<div class="mb-6 p-4 border rounded-lg bg-white">
+    <h2 class="font-semibold my-2">Add New Photo</h2>
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button class="px-4 py-2 bg-blue-600 text-white rounded">Upload</button>
+
+        {% for field in form %}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                {{ field.label }}
+            </label>
+
+            {{ field }}
+
+            {% for error in field.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+            Save
+        </button>
+        <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+            onclick="window.history.back()">
+            Cancel
+        </button>
     </form>
 </div>
 
-<!-- Existing photos -->
-<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-    {% for img in images %}
-    <div class="border rounded p-2 bg-white shadow">
-        <img src="{{ img.image.url }}" class="w-full h-40 object-cover rounded">
 
-        <form method="POST" action="{% url 'update_cat_image' img.id %}" class="mt-2">
-            {% csrf_token %}
-            <input type="text" name="caption" value="{{ img.caption }}" class="w-full border rounded p-1 mb-2">
+<!-- Add SortableJS -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
-            <label class="flex items-center space-x-2 mb-2">
-                <input type="checkbox" name="primary" {% if img.primary %}checked{% endif %}>
-                <span>Primary</span>
-            </label>
+<div x-data x-init="
+        new Sortable($refs.list, {
+            animation: 150,
+            handle: '.handle',
+            ghostClass: 'opacity-50',
+            onEnd(evt) {
+                let order = Array.from($refs.list.children).map(el => el.dataset.id);
 
-            <button class="px-3 py-1 bg-green-600 text-white rounded">Save</button>
-        </form>
+                fetch('{% url 'reorder_cat_images' cat.id %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams(order.map(id => ['order[]', id]))
+                });
+            }
+        });
+    ">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4" x-ref="list">
+        {% for img in images %}
+        <div class="rounded-lg p-2 bg-white shadow flex flex-col gap-2 items-center relative" data-id="{{ img.id }}">
 
-        <form method="POST" action="{% url 'delete_cat_image' img.id %}" class="mt-2">
-            {% csrf_token %}
-            <button class="px-3 py-1 bg-red-600 text-white rounded" onclick="return confirm('Delete this photo?')">
-                Delete
-            </button>
-        </form>
+            <!-- Top icon bar -->
+            <div class="absolute top-2 left-4 right-4 flex justify-between items-center">
+
+                <!-- Drag handle -->
+                <div class="handle cursor-move text-gray-600">
+                    <i class="fa-solid fa-arrows-up-down-left-right"></i>
+                </div>
+
+                <!-- Primary star -->
+                {% if img.primary %}
+                <div class="text-yellow-500">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                {% else %}
+                <form method="POST" action="{% url 'set_primary_image' img.id %}">
+                    {% csrf_token %}
+                    <button class="text-gray-500 hover:text-yellow-500" title="Set as primary">
+                        <i class="fa-regular fa-star"></i>
+                    </button>
+                </form>
+                {% endif %}
+
+                <!-- Delete -->
+                <form method="POST" action="{% url 'delete_cat_image' img.id %}">
+                    {% csrf_token %}
+                    <button class="text-red-600 hover:text-red-800" onclick="return confirm('Delete this photo?')">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </form>
+
+            </div>
+
+            <!-- Image -->
+            <img src="{{ img.image.url }}" class="w-full h-80 md:h-40 object-cover rounded mt-8">
+
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
+
 {% endblock %}

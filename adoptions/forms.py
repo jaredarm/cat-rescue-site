@@ -1,6 +1,6 @@
 from django import forms
 from .models import Application
-from core.forms import TailwindModelForm
+from common.forms import TailwindModelForm
 
 
 class ApplicationForm(TailwindModelForm):
@@ -22,9 +22,6 @@ class ApplicationForm(TailwindModelForm):
              'fields': ('first_name', 'family_name', 'address_line1', 'address_line2', 'city')}),
         )
         widgets = {
-            "cats": forms.SelectMultiple(attrs={
-                "class": "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            }),
             "reason_for_adopting": forms.Textarea(attrs={
                 "rows": 3,
                 "class": "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"

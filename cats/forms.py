@@ -1,7 +1,9 @@
 from django import forms
-from django.forms import inlineformset_factory
+from django.http import JsonResponse
+from django.db.models import Q
 from .models import Cat, CatImage
-from core.forms import TailwindModelForm
+from common.forms import TailwindModelForm
+
 
 
 class CatForm(TailwindModelForm):
@@ -17,4 +19,4 @@ class CatForm(TailwindModelForm):
 class CatImageForm(forms.ModelForm):
     class Meta:
         model = CatImage
-        fields = ["image", "caption", "primary"]
+        fields = ["image", "primary",]

@@ -1,0 +1,48 @@
+<div 
+    x-data="bondedCatsComponent(
+        {{ form.instance.id|default:'null' }},
+        {{ bonded_cat_ids|safe }}
+    )"
+>
+
+    <label class="block text-sm font-medium text-gray-700 mb-1">
+        Bonded Cats
+    </label>
+
+    <!-- Pills -->
+    <div class="flex flex-wrap gap-2">
+        <template x-for="cat in selected" :key="cat.id">
+            <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded-full flex items-center gap-1">
+                <span x-text="cat.name"></span>
+                <button type="button" @click="remove(cat.id)" class="text-purple-700 hover:text-purple-900">
+                    &times;
+                </button>
+            </span>
+        </template>
+    </div>
+
+    <!-- Search box -->
+    <input 
+        type="text"
+        placeholder="Search cats..."
+        class="border rounded p-2 w-full"
+        x-model="query"
+        @input.debounce.300ms="search()"
+    >
+
+    <!-- Search results -->
+    <div class="border rounded bg-white shadow" x-show="results.length > 0">
+        <template x-for="cat in results" :key="cat.id">
+            <div 
+                class="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                @click="add(cat)"
+                x-text="cat.name"
+            ></div>
+        </template>
+    </div>
+
+    <!-- Hidden inputs Django reads -->
+    <template x-for="id in selectedIds" :key="id">
+        <input type="hidden" name="bonded_cats" :value="id">
+    </template>
+</div>
