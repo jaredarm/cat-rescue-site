@@ -49,6 +49,15 @@
                     <i class="fa-solid fa-microchip"></i>
                 </div>
                 {% endif %}
+
+                {% if cat.bonded_cats.exists %}
+                <div class="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-sm"
+                    title="Bonded">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                {% endif %}
+
+
             </div>
 
             <img src="{{ cat.primary_image.image.url }}" alt="{{ cat.name }}"
@@ -69,7 +78,8 @@
                     <li><i class="fa-solid fa-book mr-2"></i>{{ cat.tagline }}</li>
                     <li><i class="fa-solid fa-location-dot mr-2"></i>Fostered in {{ cat.fostered_in }}</li>
                     {% if cat.bonded_cats.exists %}
-                    <li><i class="fa-solid fa-heart mr-2"></i>Bonded with {{ cat.bonded_partners_display }}</li>
+                    <li><i class="fa-solid fa-heart mr-2"></i>Bonded with {{ cat.bonded_partners_display }}
+                    </li>
                     {% endif %}
 
                 </ul>

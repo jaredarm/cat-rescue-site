@@ -49,6 +49,10 @@ class Application(models.Model):
     email = models.EmailField(max_length=50)
     phone = models.CharField(max_length=50)
     occupation = models.CharField(max_length=100, blank=True)
+    # Vet details
+    vet_name = models.CharField(max_length=255, blank=True)
+    # Driving licence upload for address verification
+    driving_license = models.FileField(upload_to='applications/driving_licenses/', blank=True)
 
     # Household
     accommodation_type = models.CharField(

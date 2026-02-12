@@ -142,7 +142,7 @@ def set_primary_image(request, image_id):
     if request.method == "POST":
         # Mark this image as primary
         image.primary = True
-        image.save()  # Your model's save() already unsets others
+        image.save()
 
     return redirect("manage_cat_photos", cat_id=cat.id)
 

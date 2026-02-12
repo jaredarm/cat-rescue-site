@@ -7,36 +7,73 @@
 <form method="POST" enctype="multipart/form-data" class="space-y-10">
     {% csrf_token %}
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {% for field in form %}
-        {% if field.name == "cats" %}
-        <div class="md:col-span-2">
-            {% if form.initial.cats %}
-                {% include "adoptions/widgets/cats_widget.html" with selected_cat_ids=form.initial.cats %}
-            {% elif form.instance.pk %}
-                {% include "adoptions/widgets/cats_widget.html" with selected_cat_ids=form.instance.cats.all %}
-            {% else %}
-                {% include "adoptions/widgets/cats_widget.html" %}
+    {% for title, opts in form.fieldsets %}
+    <section class="bg-slate-100 p-4 rounded shadow">
+        <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold">{{ title }}</h3>
+            {% if opts.description %}
+            <p class="text-sm text-gray-500">{{ opts.description }}</p>
             {% endif %}
         </div>
-        {% else %}
-        <div>
-            <label class="font-semibold">
-                {{ field.label }}
-            </label>
 
-            {{ field }}
-
-            {% if field.help_text %}
-            <p class="text-sm text-gray-500">{{ field.help_text }}</p>
-            {% endif %}
-            {% for error in field.errors %}
-            <p class="text-red-600 text-sm">{{ error }}</p>
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for field in form %}
+                {% if field.name in opts.fields %}
+                    {% if field.name == 'cats' %}
+                    <div class="md:col-span-2">
+                        {% if form.initial.cats %}
+                            {% include "adoptions/widgets/cats_widget.html" with selected_cat_ids=form.initial.cats %}
+                        {% elif form.instance.pk %}
+                            {% include "adoptions/widgets/cats_widget.html" with selected_cat_ids=form.instance.cats.all %}
+                        {% else %}
+                            {% include "adoptions/widgets/cats_widget.html" %}
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    {% with widget=field.field.widget_type %}
+                        {% if widget == 'CheckboxInput' %}
+                            <div class="flex items-start gap-3">
+                                <label class="inline-flex items-center gap-2">
+                                    {{ field }}
+                                    <span class="font-semibold">{{ field.label }}</span>
+                                </label>
+                                {% if field.help_text %}
+                                <p class="text-sm text-gray-500">{{ field.help_text }}</p>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                <p class="text-red-600 text-sm">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% elif widget == 'Textarea' or widget == 'ClearableFileInput' %}
+                            <div class="md:col-span-2">
+                                <label class="font-semibold">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                <p class="text-sm text-gray-500">{{ field.help_text }}</p>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                <p class="text-red-600 text-sm">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div>
+                                <label class="font-semibold">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                <p class="text-sm text-gray-500">{{ field.help_text }}</p>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                <p class="text-red-600 text-sm">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    {% endif %}
+                {% endif %}
             {% endfor %}
         </div>
-        {% endif %}
-        {% endfor %}
-    </div>
+    </section>
+    {% endfor %}
 
     <div class="flex gap-4">
         <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
