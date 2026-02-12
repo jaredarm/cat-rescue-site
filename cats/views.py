@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy, reverse
 from django.http import JsonResponse
+from django.db.models import Q
 from .models import Cat
 from .forms import CatForm, CatImage, CatImageForm
 
@@ -19,26 +20,31 @@ class CatListView(ListView):
         qs = Cat.objects.all()
         parameters = self.request.GET
 
-        if parameters.get("vaccinated"):
-            qs = qs.filter(is_vaccinated=True)
+        # Age filtering using model properties
+        age_filter = parameters.get("age")
+        if age_filter:
+            cats_list = list(qs)
+            if age_filter == "kitten":
+                cats_list = [cat for cat in cats_list if cat.is_kitten]
+            elif age_filter == "adult":
+                cats_list = [cat for cat in cats_list if cat.is_adult]
+            elif age_filter == "senior":
+                cats_list = [cat for cat in cats_list if cat.is_senior]
+            qs = cats_list
 
-        if parameters.get("microchipped"):
-            qs = qs.filter(is_microchipped=True)
+        # Special needs filtering
+        if parameters.get("special_needs"):
+            if isinstance(qs, list):
+                qs = [cat for cat in qs if cat.is_special_needs]
+            else:
+                qs = qs.filter(is_special_needs=True)
 
-        if parameters.get("sterilised"):
-            qs = qs.filter(is_sterilised=True)
-
-        if parameters.get("fiv_positive"):
-            qs = qs.filter(is_fiv_positive=True)
-
-        if parameters.get("good_with_kids"):
-            qs = qs.filter(is_good_with_kids=True)
-
-        if parameters.get("good_with_dogs"):
-            qs = qs.filter(is_good_with_dogs=True)
-
-        if parameters.get("good_with_cats"):
-            qs = qs.filter(is_good_with_cats=True)
+        # Bonded pairs filtering
+        if parameters.get("bonded_pairs"):
+            if isinstance(qs, list):
+                qs = [cat for cat in qs if cat.bonded_cats.exists()]
+            else:
+                qs = qs.filter(bonded_cats__isnull=False).distinct()
 
         return qs
 

@@ -137,7 +137,14 @@ class Cat(models.Model):
             return None
 
         return self.age_years_decimal < 1
+    
+    @property
+    def is_adult(self):
+        if not self.date_of_birth:
+            return None
 
+        return 1 <= self.age_years_decimal
+    
     @property
     def is_senior(self):
         if not self.date_of_birth:
