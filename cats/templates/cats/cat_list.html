@@ -9,136 +9,148 @@
 {% block content %}
 
 <!-- Filters Section -->
-<div class="mb-6 p-4 bg-white rounded-lg shadow-md">
+<div class="mb-6 p-4 card-filter">
     <form method="get" class="space-y-4">
-        <h3 class="text-lg font-semibold text-purple-600 mb-4">Find Your Purrfect Cat</h3>
-        
+        <h3 class="text-lg font-semibold text-purple-600 dark:text-purple-400 mb-4">Find Your Purrfect Cat</h3>
+
         <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
             <!-- Age Filter -->
             <div class="flex flex-col">
-                <label for="age" class="text-sm font-medium text-gray-700 mb-2">Age</label>
-                <select id="age" name="age" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <label for="age" class="form-label mb-2">Age</label>
+                <select id="age" name="age" class="form-select">
                     <option value="">All Ages</option>
-                    <option value="kitten" {% if request.GET.age == 'kitten' %}selected{% endif %}>Kitten (Under 1 year)</option>
-                    <option value="adult" {% if request.GET.age == 'adult' %}selected{% endif %}>Adult (1+ years)</option>
-                    <option value="senior" {% if request.GET.age == 'senior' %}selected{% endif %}>Senior (8+ years)</option>
+                    <option value="kitten" {% if request.GET.age == "kitten" %}selected{% endif %}>
+                        Kitten (Under 1 year)
+                    </option>
+                    <option value="adult" {% if request.GET.age == "adult" %}selected{% endif %}>
+                        Adult (1+ years)
+                    </option>
+                    <option value="senior" {% if request.GET.age == "senior" %}selected{% endif %}>
+                        Senior (8+ years)
+                    </option>
                 </select>
             </div>
 
             <!-- Special Needs Filter -->
             <div class="flex items-center mt-6">
-                <input type="checkbox" id="special_needs" name="special_needs" value="on" class="w-4 h-4 text-purple-600 rounded focus:ring-purple-500" {% if request.GET.special_needs %}checked{% endif %}>
-                <label for="special_needs" class="ml-2 text-sm font-medium text-gray-700">Special Needs Only</label>
+                <input type="checkbox" id="special_needs" name="special_needs" value="on" class="form-checkbox"
+                {% if request.GET.special_needs %}checked{% endif %}>
+                <label for="special_needs" class="ml-2 form-label">Special Needs Only</label>
             </div>
 
             <!-- Bonded Pairs Filter -->
             <div class="flex items-center mt-6">
-                <input type="checkbox" id="bonded_pairs" name="bonded_pairs" value="on" class="w-4 h-4 text-purple-600 rounded focus:ring-purple-500" {% if request.GET.bonded_pairs %}checked{% endif %}>
-                <label for="bonded_pairs" class="ml-2 text-sm font-medium text-gray-700">Bonded Pairs Only</label>
+                <input type="checkbox" id="bonded_pairs" name="bonded_pairs" value="on" class="form-checkbox"
+                {% if request.GET.bonded_pairs %}checked{% endif %}>
+                <label for="bonded_pairs" class="ml-2 form-label">Bonded Pairs Only</label>
             </div>
 
             <!-- Submit Button -->
             <div class="flex items-end">
-                <button type="submit" class="w-full px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition">
+                <button type="submit" class="w-full btn-primary">
                     <i class="fa-solid fa-filter mr-2"></i>Filter
                 </button>
-                <a href="{% url 'cat_list' %}" class="ml-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition">
+                <a href="{% url 'cat_list' %}" class="ml-2 btn-secondary">
                     <i class="fa-solid fa-xmark"></i>
                 </a>
             </div>
         </div>
     </form>
 </div>
+<div class="page-container">
+    <div class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
+        {% for cat in cats %}
+        <a href="{% url 'cat_detail' cat.pk %}" id="{{ cat.id }}">
+            <div class="card-cat">
 
-<div class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
-    {% for cat in cats %}
-    <a href="{% url 'cat_detail' cat.pk %}" id="{{ cat.id }}">
-        <div class="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col lg:flex-row">
-
-            <!-- Floating icons -->
-            <div class="absolute top-2 right-2 flex-col space-y-1 text-md text-white">
-                {% if cat.is_kitten %}
-                <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-sm" title="Kitten">
-                    <i class="fa-solid fa-baby"></i>
-                </div>
-                {% endif %}
-                {% if cat.is_senior %}
-                <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-sm" title="Senior">
-                    <i class="fa-solid fa-hat-cowboy"></i>
-                </div>
-                {% endif %}
-                <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-sm"
-                    title="{{ cat.get_sex_display }}">
-                    {% if cat.sex == "female" %}
-                    <i class="fa-solid fa-venus"></i>
-                    {% elif cat.sex == "male" %}
-                    <i class="fa-solid fa-mars"></i>
-                    {% else %}
-                    <i class="fa-solid fa-genderless"></i>
+                <!-- Floating icons -->
+                <div class="absolute top-2 right-2 flex-col space-y-1 text-md text-white">
+                    {% if cat.is_kitten %}
+                    <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-sm"
+                        title="Kitten">
+                        <i class="fa-solid fa-baby"></i>
+                    </div>
                     {% endif %}
-                </div>
+                    {% if cat.is_senior %}
+                    <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-sm"
+                        title="Senior">
+                        <i class="fa-solid fa-hat-cowboy"></i>
+                    </div>
+                    {% endif %}
+                    <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-sm"
+                        title="{{ cat.get_sex_display }}">
+                        {% if cat.sex == "female" %}
+                        <i class="fa-solid fa-venus"></i>
+                        {% elif cat.sex == "male" %}
+                        <i class="fa-solid fa-mars"></i>
+                        {% else %}
+                        <i class="fa-solid fa-genderless"></i>
+                        {% endif %}
+                    </div>
 
-                {% if cat.is_vaccinated %}
-                <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-sm"
-                    title="Vaccinated">
-                    <i class="fa-solid fa-syringe"></i>
-                </div>
-                {% endif %}
+                    {% if cat.is_vaccinated %}
+                    <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-sm"
+                        title="Vaccinated">
+                        <i class="fa-solid fa-syringe"></i>
+                    </div>
+                    {% endif %}
 
-                {% if cat.is_microchipped %}
-                <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-sm"
-                    title="Microchipped">
-                    <i class="fa-solid fa-microchip"></i>
-                </div>
-                {% endif %}
+                    {% if cat.is_microchipped %}
+                    <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-sm"
+                        title="Microchipped">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    {% endif %}
 
-                {% if cat.bonded_cats.exists %}
-                <div class="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-sm"
-                    title="Bonded">
-                    <i class="fa-solid fa-heart"></i>
-                </div>
-                {% endif %}
-
-
-            </div>
-
-            <img src="{{ cat.primary_image.image.url }}" alt="{{ cat.name }}"
-                class="w-full lg:w-1/3 object-cover h-min-50 h-80 overflow-hidden" />
-            <div class="p-4 flex-1 text-purple-600">
-                <h2 class="text-xl font-semibold">
-                    <i class="fa-solid fa-heart"></i>
-                    {{ cat.name }}
-                    <i class="fa-solid fa-heart"></i>
-                </h2>
-
-                <p class="text-gray-700 text-sm mb-2 mt-2">{{ cat.tagline }}</p>
-
-                <ul class="flex-col mb-2 text-sm text-gray-600">
-                    <li><i class="fa-solid fa-paw mr-2"></i>{{ cat.breed }}</li>
-                    <li><i class="fa-solid fa-brush mr-2"></i>{{ cat.colour }}</li>
-                    <li><i class="fa-solid fa-cake-candles mr-2"></i>{{ cat.age }}</li>
-                    <li><i class="fa-solid fa-book mr-2"></i>{{ cat.tagline }}</li>
-                    <li><i class="fa-solid fa-location-dot mr-2"></i>Fostered in {{ cat.fostered_in }}</li>
                     {% if cat.bonded_cats.exists %}
-                    <li><i class="fa-solid fa-heart mr-2"></i>Bonded with {{ cat.bonded_partners_display }}
-                    </li>
+                    <div class="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-sm"
+                        title="Bonded">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
                     {% endif %}
 
-                </ul>
+
+                </div>
+
+                <img src="{{ cat.primary_image.image.url }}" alt="{{ cat.name }}"
+                    class="w-full lg:w-1/3 object-cover h-min-50 h-80 overflow-hidden" />
+                <div class="p-4 flex-1 text-purple-600 dark:text-purple-400">
+                    <h2 class="text-xl font-semibold">
+                        <i class="fa-solid fa-heart"></i>
+                        {{ cat.name }}
+                        <i class="fa-solid fa-heart"></i>
+                    </h2>
+
+                    <p class="text-gray-700 dark:text-gray-300 text-sm mb-2 mt-2">{{ cat.tagline }}</p>
+
+                    <ul class="flex-col mb-2 text-sm text-gray-600 dark:text-gray-400">
+                        <li><i class="fa-solid fa-paw mr-2"></i>{{ cat.breed }}</li>
+                        <li><i class="fa-solid fa-brush mr-2"></i>{{ cat.colour }}</li>
+                        <li><i class="fa-solid fa-cake-candles mr-2"></i>{{ cat.age }}</li>
+                        <li><i class="fa-solid fa-book mr-2"></i>{{ cat.tagline }}</li>
+                        <li><i class="fa-solid fa-location-dot mr-2"></i>Fostered in {{ cat.fostered_in }}</li>
+                        {% if cat.bonded_cats.exists %}
+                        <li><i class="fa-solid fa-heart mr-2"></i>Bonded with {{ cat.bonded_partners_display }}
+                        </li>
+                        {% endif %}
+
+                    </ul>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <div class="empty-state">
+            <div class="empty-state-box">
+                <i class="fa-solid fa-cat text-6xl text-gray-400 dark:text-gray-600 mb-4"></i>
+                <h3 class="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-2">No cats found</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-6">We couldn't find any cats matching your filters. Please
+                    adjust your search and try again!</p>
+                <a href="{% url 'cat_list' %}" class="inline-block btn-primary">
+                    <i class="fa-solid fa-arrow-left mr-2"></i>Clear Filters
+                </a>
             </div>
         </div>
-    </a>
-    {% empty %}
-    <div class="col-span-full py-12 text-center">
-        <div class="bg-gray-100 rounded-lg p-8">
-            <i class="fa-solid fa-cat text-6xl text-gray-400 mb-4"></i>
-            <h3 class="text-2xl font-semibold text-gray-700 mb-2">No cats found</h3>
-            <p class="text-gray-600 mb-6">We couldn't find any cats matching your filters. Please adjust your search and try again!</p>
-            <a href="{% url 'cat_list' %}" class="inline-block px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition">
-                <i class="fa-solid fa-arrow-left mr-2"></i>Clear Filters
-            </a>
-        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}

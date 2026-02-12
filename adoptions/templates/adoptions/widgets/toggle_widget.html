@@ -1,0 +1,6 @@
+<label class="flex items-center cursor-pointer">
+    <input type="checkbox" name="{{ widget.name }}" value="true" {% if widget.value %}checked{% endif %} class="sr-only toggle-checkbox" id="{{ widget.attrs.id|default:widget.name }}">
+    <span class="toggle-bg w-12 h-6 flex items-center bg-gray-300 dark:bg-gray-700 rounded-full p-1 transition-colors duration-300" style="min-width:3rem">
+        <span class="toggle-dot w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 {% if widget.value %}translate-x-6 bg-purple-600{% endif %}"></span>
+    </span>
+</label>

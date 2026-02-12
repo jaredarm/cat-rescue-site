@@ -3,6 +3,10 @@ from .models import Application
 from common.forms import TailwindModelForm
 
 
+class ToggleWidget(forms.CheckboxInput):
+    template_name = "adoptions/widgets/toggle_widget.html"
+
+
 class ApplicationForm(TailwindModelForm):
     class Meta:
         model = Application
@@ -106,7 +110,7 @@ class ApplicationForm(TailwindModelForm):
         super().__init__(*args, **kwargs)
         # expose fieldsets on the form instance for templates
         self.fieldsets = getattr(self.Meta, 'fieldsets', ())
-        # convert boolean-style fields to Yes/No radio choices for clearer UI
+        # render boolean-style fields as toggle switches
         bool_fields = [
             'busy_street', 'allergies',
             'other_pets_cat', 'other_pets_dog', 'other_pets_rabbit', 'other_pets_other',
@@ -116,25 +120,7 @@ class ApplicationForm(TailwindModelForm):
 
         for name in bool_fields:
             if name in self.fields:
-                orig = self.fields[name]
-
-                # determine initial as 'True' / 'False' strings when possible
-                if name in self.initial:
-                    init = 'True' if self.initial.get(name) else 'False'
-                elif hasattr(self, 'instance') and getattr(self.instance, name, None) is not None:
-                    init = 'True' if getattr(self.instance, name) else 'False'
-                else:
-                    init = None
-
-                self.fields[name] = forms.TypedChoiceField(
-                    choices=(('True', 'Yes'), ('False', 'No')),
-                    coerce=lambda v: v == 'True',
-                    widget=forms.RadioSelect(attrs={"class": "space-x-2"}),
-                    required=orig.required,
-                    label=orig.label,
-                    help_text=orig.help_text,
-                    initial=init,
-                )
+                self.fields[name].widget = ToggleWidget()
         # expose a simple widget type name on each field to make template logic safer
         for name, field in self.fields.items():
             try:

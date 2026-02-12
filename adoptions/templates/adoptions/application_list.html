@@ -1,52 +1,122 @@
 {% extends "base.html" %}
 {% block title %}9 Lives Cat Rescue - Applications{% endblock %}
 {% block content %}
-<h1 class="text-xl mb-4">Applications</h1>
 
-<h1>FILTER</h1>
-<form method="get" class="mb-6 flex items-center gap-4">
-
-    <select name="status" class="border rounded shadow px-3 py-2" onchange="this.form.submit()">
-        <option value="">All</option>
-        {% for value, label in status_choices %}
-        <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>
-            {{ label }}
-        </option>
-        {% endfor %}
-    </select>
-
-    {% if current_status %}
-    <a href="{% url 'application_list' %}" class="text-sm text-purple-700 underline">
-        Clear filter
-    </a>
-    {% endif %}
-</form>
-
-<div class="flex flex-col space-y-1">
-    {% for application in applications %}
-    <div class="flex flex-col md:items-center md:grid md:grid-cols-6 p-4 relative bg-white rounded-lg shadow ">
-        <div>
-            {{ application.full_name }}
-        </div>
-        <div>
-            {% for cat in application.cats.all %}
-            <span class="bg-purple-400 px-2 py-1 text-xs text-white rounded-full">{{ cat.name }}</span>
-            {% endfor %}
-        </div>
-        <div>
-            {{ application.city }}, {{ application.postal_code }}
-        </div>
-        <div>
-            {{ application.get_status_display }}
-        </div>
-        <div>
-            {{ application.submitted_at }}
-        </div>
-        <a href="{% url 'application_detail' application.pk %}"
-            class="w-auto h-auto text-center rounded-full bg-purple-600 text-white text-md py-1 px-2">
-            View
-        </a>
+<div class="page-container">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="page-heading-main">Adoption Applications</h1>
+        <p class="page-paragraph text-gray-600 dark:text-gray-400">Review and manage cat adoption applications</p>
     </div>
-    {% endfor %}
+
+    <!-- Filter Section -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-6">
+        <form method="get" class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div class="w-full sm:w-auto">
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Filter by Status</label>
+                <select name="status" class="w-full sm:w-48 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-600" onchange="this.form.submit()">
+                    <option value="">All Applications</option>
+                    {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {% if current_status %}
+            <div class="w-full sm:w-auto">
+                <a href="{% url 'application_list' %}" class="inline-block text-sm font-semibold text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 underline">
+                    <i class="fa-solid fa-times mr-1"></i> Clear Filter
+                </a>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Applications List -->
+    <div class="space-y-3">
+        {% for application in applications %}
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-lg transition p-4 md:p-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-start md:items-center">
+                <!-- Applicant Name -->
+                <div class="md:col-span-2">
+                    <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Applicant</div>
+                    <div class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ application.full_name }}</div>
+                </div>
+
+                <!-- Cats Applied For -->
+                <div class="md:col-span-2">
+                    <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Cats Applied For</div>
+                    <div class="flex flex-wrap gap-2">
+                        {% for cat in application.cats.all %}
+                        <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 text-xs font-semibold rounded-full">
+                            {{ cat.name }}
+                        </span>
+                        {% empty %}
+                        <span class="text-gray-500 dark:text-gray-400 text-sm italic">None</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="md:col-span-2">
+                    <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Location</div>
+                    <div class="text-sm text-gray-700 dark:text-gray-300">{{ application.city }}, {{ application.postal_code }}</div>
+                </div>
+
+                <!-- Status -->
+                <div class="md:col-span-2">
+                    <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Status</div>
+                    <div>
+                        {% if application.get_status_display == "Approved" %}
+                            <span class="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 text-xs font-semibold rounded-full">
+                                <i class="fa-solid fa-check mr-1"></i>{{ application.get_status_display }}
+                            </span>
+                        {% elif application.get_status_display == "Rejected" %}
+                            <span class="inline-block bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-3 py-1 text-xs font-semibold rounded-full">
+                                <i class="fa-solid fa-times mr-1"></i>{{ application.get_status_display }}
+                            </span>
+                        {% elif application.get_status_display == "Pending" %}
+                            <span class="inline-block bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-3 py-1 text-xs font-semibold rounded-full">
+                                <i class="fa-solid fa-clock mr-1"></i>{{ application.get_status_display }}
+                            </span>
+                        {% else %}
+                            <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 text-xs font-semibold rounded-full">
+                                {{ application.get_status_display }}
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Submitted Date -->
+                <div class="md:col-span-2">
+                    <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Submitted</div>
+                    <div class="text-sm text-gray-700 dark:text-gray-300">{{ application.submitted_at|date:"M d, Y" }}</div>
+                </div>
+
+                <!-- View Button -->
+                <div class="md:col-span-1 flex">
+                    <a href="{% url 'application_detail' application.pk %}" class="w-full btn-primary text-center">
+                        <i class="fa-solid fa-eye mr-1"></i> View
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border border-dashed border-gray-300 dark:border-gray-600">
+            <i class="fa-solid fa-inbox text-4xl text-gray-400 dark:text-gray-600 mb-4"></i>
+            <p class="text-gray-600 dark:text-gray-400 font-semibold">No applications found</p>
+            <p class="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                {% if current_status %}
+                Try clearing the filter to see all applications
+                {% else %}
+                No one has applied yet
+                {% endif %}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
 </div>
+
 {% endblock %}

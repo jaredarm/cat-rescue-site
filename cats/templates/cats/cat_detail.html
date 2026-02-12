@@ -56,10 +56,10 @@
     }
 </script>
 
-<div class="bg-white shadow rounded-lg p-6">
+<div class="page-container">
     <!-- Navigation -->
-    <div class="mb-6 flex items-center justify-between border-b pb-4">
-        <a href="/cats/" class="inline-flex items-center gap-2 text-purple-600 hover:text-purple-800 font-medium transition">
+    <div class="mb-6 flex items-center justify-between border-b dark:border-gray-700 pb-4">
+        <a href="/cats/" class="inline-flex items-center gap-2 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 font-medium transition">
             <i class="fa-solid fa-arrow-left"></i>
             <span>Back to Cats</span>
         </a>
@@ -67,7 +67,7 @@
 
     <!-- Name and Tagline Section -->
     <div class="mb-6">
-        <h2 class="text-3xl font-bold text-purple-700 mb-2">
+        <h2 class="text-3xl font-bold text-purple-700 dark:text-purple-300 mb-2">
             {% if cat.bonded_cats.exists %}
             <span>
                 {{ cat.name }}
@@ -82,11 +82,11 @@
             {% endif %}
         </h2>
         {% if cat.is_special_needs %}
-        <div class="inline-block bg-red-100 border border-red-300 text-red-800 px-3 py-1 rounded-full text-sm font-medium mb-2">
+        <div class="inline-block bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700 text-red-800 dark:text-red-200 px-3 py-1 rounded-full text-sm font-medium mb-2">
             <i class="fa-solid fa-triangle-exclamation mr-2"></i>Special Needs
         </div>
         {% endif %}
-        <h3 class="text-lg text-gray-600 italic">{{ cat.tagline }}</h3>
+        <h3 class="text-lg text-gray-600 dark:text-gray-400 italic">{{ cat.tagline }}</h3>
     </div>
 
     <!-- Lightbox -->
@@ -132,53 +132,53 @@
 
     <!-- Basic Information Card -->
     <div class="mb-6 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div class="bg-purple-50 rounded-lg p-4">
-            <p class="text-sm text-gray-600 font-medium">Breed</p>
-            <p class="text-lg font-semibold text-purple-700">{{ cat.breed|default:"Not specified" }}</p>
+        <div class="card-info">
+            <p class="text-muted">Breed</p>
+            <p class="text-lg font-semibold text-purple-700 dark:text-purple-300">{{ cat.breed|default:"Not specified" }}</p>
         </div>
-        <div class="bg-purple-50 rounded-lg p-4">
-            <p class="text-sm text-gray-600 font-medium">Age</p>
-            <p class="text-lg font-semibold text-purple-700">{{ cat.age }}</p>
+        <div class="card-info">
+            <p class="text-muted">Age</p>
+            <p class="text-lg font-semibold text-purple-700 dark:text-purple-300">{{ cat.age }}</p>
         </div>
-        <div class="bg-purple-50 rounded-lg p-4">
-            <p class="text-sm text-gray-600 font-medium">Colour</p>
-            <p class="text-lg font-semibold text-purple-700">{{ cat.colour|default:"Not specified" }}</p>
+        <div class="card-info">
+            <p class="text-muted">Colour</p>
+            <p class="text-lg font-semibold text-purple-700 dark:text-purple-300">{{ cat.colour|default:"Not specified" }}</p>
         </div>
-        <div class="bg-purple-50 rounded-lg p-4">
-            <p class="text-sm text-gray-600 font-medium">Sex</p>
-            <p class="text-lg font-semibold text-purple-700">{{ cat.get_sex_display }}</p>
+        <div class="card-info">
+            <p class="text-muted">Sex</p>
+            <p class="text-lg font-semibold text-purple-700 dark:text-purple-300">{{ cat.get_sex_display }}</p>
         </div>
-        <div class="bg-purple-50 rounded-lg p-4">
-            <p class="text-sm text-gray-600 font-medium">Status</p>
-            <p class="text-lg font-semibold text-purple-700">{{ cat.get_status_display }}</p>
+        <div class="card-info">
+            <p class="text-muted">Status</p>
+            <p class="text-lg font-semibold text-purple-700 dark:text-purple-300">{{ cat.get_status_display }}</p>
         </div>
-        <div class="bg-purple-50 rounded-lg p-4">
-            <p class="text-sm text-gray-600 font-medium">Fostered In</p>
-            <p class="text-lg font-semibold text-purple-700">{{ cat.fostered_in|default:"Not specified" }}</p>
+        <div class="card-info">
+            <p class="text-muted">Fostered In</p>
+            <p class="text-lg font-semibold text-purple-700 dark:text-purple-300">{{ cat.fostered_in|default:"Not specified" }}</p>
         </div>
     </div>
 
     <!-- Main Description -->
-    <div class="mb-6 bg-blue-50 rounded-lg p-6 border-l-4 border-blue-400">
-        <h2 class="text-xl font-semibold text-blue-900 mb-3">About {{ cat.name }}</h2>
-        <p class="text-gray-700 leading-relaxed">{{ cat.description|linebreaks }}</p>
+    <div class="mb-6 description-box">
+        <h2 class="heading-subsection">About {{ cat.name }}</h2>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">{{ cat.description|linebreaks }}</p>
     </div>
 
     <!-- Health and Compatibility Section -->
     <div class="mb-6">
-        <h2 class="text-2xl font-semibold text-purple-700 mb-4">Health & Compatibility</h2>
+        <h2 class="heading-section">Health & Compatibility</h2>
         <div class="grid md:grid-cols-2 gap-4">
             <!-- Vaccinated -->
             {% if cat.is_vaccinated or cat.vaccinated_notes %}
-            <div class="bg-green-50 border border-green-200 rounded-lg p-4 hover:shadow-md transition">
+            <div class="card-health-positive">
                 <div class="flex {% if not cat.vaccinated_notes %}items-center{% else %}items-start{% endif %} gap-3">
-                    <span class="text-2xl text-green-600">
+                    <span class="icon-check-positive">
                         {% if cat.is_vaccinated %}<i class="fa-solid fa-check"></i>{% else %}<i class="fa-solid fa-info"></i>{% endif %}
                     </span>
                     <div>
-                        <p class="font-semibold text-green-900">Vaccinated</p>
+                        <p class="text-health-positive">Vaccinated</p>
                         {% if cat.vaccinated_notes %}
-                        <p class="text-sm text-gray-700 mt-1">{{ cat.vaccinated_notes }}</p>
+                        <p class="text-secondary">{{ cat.vaccinated_notes }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -187,13 +187,13 @@
 
             <!-- Microchipped -->
             {% if cat.is_microchipped %}
-            <div class="bg-green-50 border border-green-200 rounded-lg p-4 hover:shadow-md transition">
+            <div class="card-health-positive">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl text-green-600"><i class="fa-solid fa-check"></i></span>
+                    <span class="icon-check-positive icon-flex-shrink"><i class="fa-solid fa-check"></i></span>
                     <div>
-                        <p class="font-semibold text-green-900">Microchipped</p>
+                        <p class="text-health-positive m-0">Microchipped</p>
                         {% if cat.microchip_number %}
-                        <p class="text-sm text-gray-700 mt-1">{{ cat.microchip_number }}</p>
+                        <p class="text-secondary">{{ cat.microchip_number }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -202,11 +202,11 @@
 
             <!-- Sterilised -->
             {% if cat.is_sterilised %}
-            <div class="bg-green-50 border border-green-200 rounded-lg p-4 hover:shadow-md transition">
+            <div class="card-health-positive">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl text-green-600"><i class="fa-solid fa-check"></i></span>
+                    <span class="icon-check-positive icon-flex-shrink"><i class="fa-solid fa-check"></i></span>
                     <div>
-                        <p class="font-semibold text-green-900">Sterilised</p>
+                        <p class="text-health-positive m-0">Sterilised</p>
                     </div>
                 </div>
             </div>
@@ -214,15 +214,15 @@
 
             <!-- FIV Status -->
             {% if cat.is_fiv_positive or cat.health_notes %}
-            <div class="{% if cat.is_fiv_positive %}bg-orange-50 border border-orange-200{% else %}bg-green-50 border border-green-200{% endif %} rounded-lg p-4 hover:shadow-md transition">
+            <div class="{% if cat.is_fiv_positive %}card-health-critical{% else %}card-health-positive{% endif %}">
                 <div class="flex {% if not cat.health_notes %}items-center{% else %}items-start{% endif %} gap-3">
-                    <span class="text-2xl {% if cat.is_fiv_positive %}text-orange-600{% else %}text-green-600{% endif %}">
+                    <span class="{% if cat.is_fiv_positive %}icon-check-critical{% else %}icon-check-positive{% endif %}">
                         {% if cat.is_fiv_positive %}<i class="fa-solid fa-circle-exclamation"></i>{% else %}<i class="fa-solid fa-check"></i>{% endif %}
                     </span>
                     <div>
-                        <p class="font-semibold {% if cat.is_fiv_positive %}text-orange-900{% else %}text-green-900{% endif %}">FIV Status</p>
+                        <p class="{% if cat.is_fiv_positive %}text-health-critical{% else %}text-health-positive{% endif %}">FIV Status</p>
                         {% if cat.health_notes %}
-                        <p class="text-sm text-gray-700 mt-1">{{ cat.health_notes }}</p>
+                        <p class="text-secondary">{{ cat.health_notes }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -233,19 +233,19 @@
 
     <!-- Compatibility Section -->
     <div class="mb-6">
-        <h2 class="text-2xl font-semibold text-purple-700 mb-4">Compatibility</h2>
+        <h2 class="heading-section">Compatibility</h2>
         <div class="grid md:grid-cols-2 gap-4">
             <!-- Good with Kids -->
             {% if cat.is_good_with_kids or cat.good_with_kids_notes %}
-            <div class="{% if cat.is_good_with_kids %}bg-green-50 border border-green-200{% else %}bg-amber-50 border border-amber-200{% endif %} rounded-lg p-4 hover:shadow-md transition">
+            <div class="{% if cat.is_good_with_kids %}card-health-positive{% else %}card-health-warning{% endif %}">
                 <div class="flex {% if not cat.good_with_kids_notes %}items-center{% else %}items-start{% endif %} gap-3">
-                    <span class="text-2xl {% if cat.is_good_with_kids %}text-green-600{% else %}text-amber-600{% endif %}">
+                    <span class="{% if cat.is_good_with_kids %}icon-check-positive{% else %}icon-check-warning{% endif %}">
                         {% if cat.is_good_with_kids %}<i class="fa-solid fa-check"></i>{% else %}<i class="fa-solid fa-circle-info"></i>{% endif %}
                     </span>
                     <div>
-                        <p class="font-semibold {% if cat.is_good_with_kids %}text-green-900{% else %}text-amber-900{% endif %}">Good with Kids</p>
+                        <p class="{% if cat.is_good_with_kids %}text-health-positive{% else %}text-health-warning{% endif %}">Good with Kids</p>
                         {% if cat.good_with_kids_notes %}
-                        <p class="text-sm text-gray-700 mt-1">{{ cat.good_with_kids_notes }}</p>
+                        <p class="text-secondary">{{ cat.good_with_kids_notes }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -254,15 +254,15 @@
 
             <!-- Good with Dogs -->
             {% if cat.is_good_with_dogs or cat.good_with_dogs_notes %}
-            <div class="{% if cat.is_good_with_dogs %}bg-green-50 border border-green-200{% else %}bg-amber-50 border border-amber-200{% endif %} rounded-lg p-4 hover:shadow-md transition">
+            <div class="{% if cat.is_good_with_dogs %}card-health-positive{% else %}card-health-warning{% endif %}">
                 <div class="flex {% if not cat.good_with_dogs_notes %}items-center{% else %}items-start{% endif %} gap-3">
-                    <span class="text-2xl {% if cat.is_good_with_dogs %}text-green-600{% else %}text-amber-600{% endif %}">
+                    <span class="{% if cat.is_good_with_dogs %}icon-check-positive{% else %}icon-check-warning{% endif %}">
                         {% if cat.is_good_with_dogs %}<i class="fa-solid fa-check"></i>{% else %}<i class="fa-solid fa-circle-info"></i>{% endif %}
                     </span>
                     <div>
-                        <p class="font-semibold {% if cat.is_good_with_dogs %}text-green-900{% else %}text-amber-900{% endif %}">Good with Dogs</p>
+                        <p class="{% if cat.is_good_with_dogs %}text-health-positive{% else %}text-health-warning{% endif %}">Good with Dogs</p>
                         {% if cat.good_with_dogs_notes %}
-                        <p class="text-sm text-gray-700 mt-1">{{ cat.good_with_dogs_notes }}</p>
+                        <p class="text-secondary">{{ cat.good_with_dogs_notes }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -271,15 +271,15 @@
 
             <!-- Good with Cats -->
             {% if cat.is_good_with_cats or cat.good_with_cats_notes %}
-            <div class="{% if cat.is_good_with_cats %}bg-green-50 border border-green-200{% else %}bg-amber-50 border border-amber-200{% endif %} rounded-lg p-4 hover:shadow-md transition">
+            <div class="{% if cat.is_good_with_cats %}card-health-positive{% else %}card-health-warning{% endif %}">
                 <div class="flex {% if not cat.good_with_cats_notes %}items-center{% else %}items-start{% endif %} gap-3">
-                    <span class="text-2xl {% if cat.is_good_with_cats %}text-green-600{% else %}text-amber-600{% endif %}">
+                    <span class="{% if cat.is_good_with_cats %}icon-check-positive{% else %}icon-check-warning{% endif %}">
                         {% if cat.is_good_with_cats %}<i class="fa-solid fa-check"></i>{% else %}<i class="fa-solid fa-circle-info"></i>{% endif %}
                     </span>
                     <div>
-                        <p class="font-semibold {% if cat.is_good_with_cats %}text-green-900{% else %}text-amber-900{% endif %}">Good with Cats</p>
+                        <p class="{% if cat.is_good_with_cats %}text-health-positive{% else %}text-health-warning{% endif %}">Good with Cats</p>
                         {% if cat.good_with_cats_notes %}
-                        <p class="text-sm text-gray-700 mt-1">{{ cat.good_with_cats_notes }}</p>
+                        <p class="text-secondary">{{ cat.good_with_cats_notes }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -291,7 +291,7 @@
     <!-- Apply Now Button -->
     <div class="flex justify-center mt-8">
         <a href="{% url 'application_add' %}?cats={{ cat.id }}{% for partner in cat.bonded_cats.all %}&cats={{ partner.id }}{% endfor %}"
-            class="inline-block bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold text-lg rounded-full py-3 px-8 transition shadow-lg">
+            class="btn-apply">
             <i class="fa-solid fa-heart mr-2"></i>Apply to Adopt
         </a>
     </div>

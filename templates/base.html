@@ -9,6 +9,15 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
+    <!-- Initialize dark mode immediately to prevent white flash -->
+    <script>
+        (function() {
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+
     <!-- Shrink navbar on scroll -->
     <script>
         // Shrink navbar on scroll
@@ -37,7 +46,6 @@
             mobile_menu.classList.toggle('bg-purple-800', window.scrollY > scroll_dist);
             mobile_menu.classList.toggle('mt-12', window.scrollY > scroll_dist);
             mobile_menu.classList.toggle('mt-28', window.scrollY <= scroll_dist);
-
         });
     </script>
 
@@ -53,12 +61,33 @@
 
 </head>
 
-<body class="min-h-screen flex flex-col bg-gray-300 text-gray-900">
+<body class="min-h-screen flex flex-col bg-gray-300 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <script>
+        // Initialize dark mode on page load
+        function initDarkMode() {
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark');
+            }
+            updateDarkModeToggle();
+        }
+
+        function updateDarkModeToggle() {
+            const toggle = document.getElementById('dark-mode-toggle');
+            const isDark = document.documentElement.classList.contains('dark');
+            if (toggle) {
+                toggle.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', initDarkMode);
+    </script>
     <!-- NAVBAR -->
-    <nav class="fixed top-0 w-full z-30 bg-purple-700 py-4 pr-4 pl-4 text-white flex items-center justify-between">
+    <nav class="fixed top-0 w-full z-30 bg-purple-700 dark:bg-purple-900 py-4 pr-4 pl-4 text-white flex items-center justify-between transition-colors duration-300">
 
         <!-- Logo and name -->
-        <a href="/" class="flex items-center">
+        <a href="/" class="flex items-center flex-shrink-0">
             <div class="flex">
                 <img class="h-20 w-auto rounded-md mr-2" id="logo" src="{% static 'images/9lives_logo.webp' %}"
                     alt="9 Lives Cat Rescue Logo">
@@ -68,28 +97,40 @@
             </div>
         </a>
 
-        <ul class="hidden md:flex space-x-4 text-sm">
-            <li><a href="/" class="hover:underline">Home</a></li>
-            <li><a href="/about/" class="hover:underline">About Us</a></li>
-            <li><a href="/cats/" class="hover:underline">Cats for adoption</a></li>
-            {% if user.is_authenticated %}
-            <li><a href="/adoptions/" class="hover:underline">Applications</a></li>
-            {% endif %}
-            <li><a href="/vets/" class="hover:underline">Our Vets</a></li>
-            <!-- <li><a href="/fostering/" class="hover:underline">Fostering</a></li>
-            <li><a href="/events/" class="hover:underline">Events</a></li>
-            <li><a href="/shop/" class="hover:underline">Shop</a></li> -->
-        </ul>
+        <!-- Right side controls -->
+        <div class="flex items-center gap-6">
+            <!-- Desktop Navigation Menu -->
+            <ul class="hidden md:flex space-x-4 text-sm">
+                <li><a href="/" class="hover:underline">Home</a></li>
+                <li><a href="/about/" class="hover:underline">About Us</a></li>
+                <li><a href="/cats/" class="hover:underline">Cats for adoption</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="/adoptions/" class="hover:underline">Applications</a></li>
+                {% endif %}
+                <li><a href="/vets/" class="hover:underline">Our Vets</a></li>
+                <!-- <li><a href="/fostering/" class="hover:underline">Fostering</a></li>
+                <li><a href="/events/" class="hover:underline">Events</a></li>
+                <li><a href="/shop/" class="hover:underline">Shop</a></li> -->
+            </ul>
 
-        <!-- Mobile Menu Button -->
-        <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none">
-            <i class="fa fa-bars fa-lg"></i>
-        </button>
+            <!-- Apply to Adopt Button -->
+            <a href="{% url 'application_add' %}" class="btn-apply hidden md:inline-block"><i class="fa-solid fa-paw mr-2"></i>Apply</a>
+
+            <!-- Dark Mode Toggle -->
+            <button id="dark-mode-toggle" class="text-white text-xl hover:text-gray-200 focus:outline-none transition" title="Toggle dark mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+
+            <!-- Mobile Menu Button (mobile only) -->
+            <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+        </div>
     </nav>
 
     <!-- Mobile Menu -->
     <div id="mobile-menu"
-        class="fixed hidden md:hidden mt-28 px-6 pt-2 pb-2 space-y-4 z-50 bg-purple-600 w-full text-white">
+        class="fixed hidden md:hidden mt-28 px-6 pt-2 pb-2 space-y-4 z-50 bg-purple-600 dark:bg-purple-800 w-full text-white transition-colors duration-300">
         <a href="/" class="block">Home</a>
         <a href="/about/" class="block">About Us</a>
         <a href="/cats/" class="block">Cats For Adoption</a>
@@ -105,12 +146,23 @@
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
         btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('click', () => {
+                const html = document.documentElement;
+                const isDark = html.classList.toggle('dark');
+                localStorage.setItem('darkMode', isDark.toString());
+                updateDarkModeToggle();
+            });
+        }
     </script>
 
     {% if user.is_authenticated %}
     <!-- ADMIN PANEL -->
     <div id="admin-menu"
-        class="fixed flex flex-col gap-1 left-2 bottom-2 z-50 bg-red-950 text-white rounded-md shadow p-4 pb-12 hidden">
+        class="fixed flex flex-col gap-1 left-2 bottom-2 z-50 bg-red-950 dark:bg-red-900 text-white rounded-md shadow p-4 pb-12 hidden transition-colors duration-300">
         <p class="font-bold mb-2">Admin Panel</p>
 
         {% block admin_panel %}
@@ -121,7 +173,7 @@
         </form>
     </div>
     <div id="admin-btn"
-        class="text-white bg-black hover:bg-red-600 cursor-pointer w-10 h-10 fixed left-1 bottom-1 rounded-full flex items-center justify-center z-50">
+        class="text-white bg-black dark:bg-gray-800 hover:bg-red-600 dark:hover:bg-red-600 cursor-pointer w-10 h-10 fixed left-1 bottom-1 rounded-full flex items-center justify-center z-50 transition-colors duration-300">
         <i class="fa-solid fa-screwdriver-wrench"></i>
     </div>
 
@@ -139,8 +191,8 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="flex w-full bottom-0 bg-white border-t py-4">
-        <div class="text-xs max-w-7xl mx-auto px-4 text-center text-gray-600">
+    <footer class="flex w-full bottom-0 bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-4 transition-colors duration-300">
+        <div class="text-xs max-w-7xl mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
             <p>© {{ now|date:"Y" }} 9 Lives Cat Rescue - Giving rescue cats a chance at a second life</p>
         </div>
     </footer>

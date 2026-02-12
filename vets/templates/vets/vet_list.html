@@ -7,44 +7,45 @@
 {% endblock %}
 
 {% block content %}
-<div class="p-4 mb-4 bg-white w-full rounded-lg">
+<div class="p-4 mb-4 bg-white w-full rounded-lg page-container">
     <h1 class="text-2xl mb-4 font-bold">Our Vets</h1>
 
     <h1 class="text-lg font-bold">Vets that Support Us</h1>
     <p>We are so grateful for these wonderful vets that help us each and every day.</p>
-</div>
 
-<div class="relative grid grid-cols-1 w-full gap-4 md:grid-cols-2 lg:grid-cols-3">
-    {% for vet in vets %}
-    <div class="relative flex flex-col w-full items-center md:grid md:grid-cols-3 p-4 bg-white rounded-lg shadow">
-        {% if user.is_authenticated %}
-        <!-- 
-        <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-sm"
-         -->
-        <div class="absolute top-2 right-2 flex gap-2">
-            <a href="{% url 'vet_edit' vet.pk %}"
-                class="flex bg-yellow-500 text-white w-8 h-8 rounded-full items-center justify-center cursor-pointer">
-                <i class="fa-solid fa-pen-to-square"></i>
-            </a>
-            <a href="{% url 'vet_delete' vet.pk %}"
-                class="flex bg-red-600 text-white w-8 h-8 rounded-full items-center justify-center cursor-pointer">
-                <i class="fa-solid fa-trash"></i>
-            </a>
-        </div>
-        {% endif %}
-        <div class="mb-4 md:mb-0">
-            {% if vet.logo %}
-            <img src="{{ vet.logo.url }}" class="w-full h-auto max-h-56">
+
+    <div class="relative grid grid-cols-1 w-full gap-4 md:grid-cols-2 lg:grid-cols-3 mt-4">
+        {% for vet in vets %}
+        <div
+            class="relative flex flex-col w-full items-center md:grid md:grid-cols-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
+            {% if user.is_authenticated %}
+            <div class="absolute top-2 right-2 flex gap-2">
+                <a href="{% url 'vet_edit' vet.pk %}"
+                    class="flex bg-yellow-500 text-white w-8 h-8 rounded-full items-center justify-center cursor-pointer">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <a href="{% url 'vet_delete' vet.pk %}"
+                    class="flex bg-red-600 text-white w-8 h-8 rounded-full items-center justify-center cursor-pointer">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+            </div>
             {% endif %}
+            <div class="mb-4 md:mb-0">
+                {% if vet.logo %}
+                <img src="{{ vet.logo.url }}" class="w-full h-auto max-h-56 rounded-md dark:rounded-full">
+                {% endif %}
+            </div>
+            <div class="col-span-2 pl-4 overflow-hidden flex flex-col gap-2">
+                <span class="text-lg font-semibold text-gray-900 dark:text-white">{{ vet.name }}</span>
+                <span class="text-gray-700 dark:text-gray-300">{{ vet.address_line1 }}, {{ vet.city }} {{ vet.state }}
+                    {{ vet.postal_code }}</span>
+                <span class="text-green-700 dark:text-green-300">{{ vet.phone }}</span>
+                <a href="{{ vet.website }}" class="underline text-blue-700 dark:text-blue-300 cursor-pointer"
+                    target="_blank">Website</a>
+            </div>
         </div>
-        <div class="col-span-2 pl-4 overflow-hidden">
-            <p class="font-semibold text-lg">{{ vet.name }}</p>
-            <p>{{ vet.address_line1 }}, {{ vet.city }} {{ vet.state }} {{ vet.postal_code }}</p>
-            <p>{{ vet.phone }}</p>
-            <p><a href="{{ vet.website }}" class="underline cursor-pointer" target="_blank">Website</a></p>
-        </div>
+    {% endfor %}
     </div>
 
-    {% endfor %}
 </div>
 {% endblock %}
