@@ -1,54 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}9 Lives Cat Rescue{% endblock %}</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}
+        9 Lives Cat Rescue
+      {% endblock %}
+    </title>
 
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 
     <!-- Initialize dark mode immediately to prevent white flash -->
     <script>
-        (function() {
-            if (localStorage.getItem('darkMode') === 'true') {
-                document.documentElement.classList.add('dark');
-            }
-        })();
+      ;(function () {
+        if (localStorage.getItem('darkMode') === 'true') {
+          document.documentElement.classList.add('dark')
+        }
+      })()
     </script>
 
     <!-- Shrink navbar on scroll -->
     <script>
-        // Shrink navbar on scroll
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            const site_name = document.querySelector('#site_name');
-            const logo = document.querySelector('#logo');
-            const mobile_menu = document.querySelector('#mobile-menu');
-            const scroll_dist = 50;
-
-            // Nav bar size and colour
-            nav.classList.toggle('bg-purple-900', window.scrollY > scroll_dist);
-            nav.classList.toggle('py-1', window.scrollY > scroll_dist);
-            nav.classList.toggle('py-4', window.scrollY <= scroll_dist);
-            nav.classList.toggle('pl-1', window.scrollY > scroll_dist);
-            nav.classList.toggle('pl-4', window.scrollY <= scroll_dist);
-
-            site_name.classList.toggle('text-md', window.scrollY > scroll_dist);
-            site_name.classList.toggle('text-xl', window.scrollY <= scroll_dist);
-
-            // Logo height
-            logo.classList.toggle('h-10', window.scrollY > scroll_dist);
-            logo.classList.toggle('h-20', window.scrollY <= scroll_dist);
-
-            // Mobile menu placement and colour
-            mobile_menu.classList.toggle('bg-purple-800', window.scrollY > scroll_dist);
-            mobile_menu.classList.toggle('mt-12', window.scrollY > scroll_dist);
-            mobile_menu.classList.toggle('mt-28', window.scrollY <= scroll_dist);
-        });
+      // Shrink navbar on scroll
+      window.addEventListener('scroll', () => {
+        const nav = document.querySelector('nav')
+        const site_name = document.querySelector('#site_name')
+        const logo = document.querySelector('#logo')
+        const mobile_menu = document.querySelector('#mobile-menu')
+        const scroll_dist = 50
+      
+        // Nav bar size and colour
+        nav.classList.toggle('bg-purple-900', window.scrollY > scroll_dist)
+        nav.classList.toggle('py-1', window.scrollY > scroll_dist)
+        nav.classList.toggle('py-4', window.scrollY <= scroll_dist)
+        nav.classList.toggle('pl-1', window.scrollY > scroll_dist)
+        nav.classList.toggle('pl-4', window.scrollY <= scroll_dist)
+      
+        site_name.classList.toggle('text-md', window.scrollY > scroll_dist)
+        site_name.classList.toggle('text-xl', window.scrollY <= scroll_dist)
+      
+        // Logo height
+        logo.classList.toggle('h-10', window.scrollY > scroll_dist)
+        logo.classList.toggle('h-20', window.scrollY <= scroll_dist)
+      
+        // Mobile menu placement and colour
+        mobile_menu.classList.toggle('bg-purple-800', window.scrollY > scroll_dist)
+        mobile_menu.classList.toggle('mt-12', window.scrollY > scroll_dist)
+        mobile_menu.classList.toggle('mt-28', window.scrollY <= scroll_dist)
+      })
     </script>
-
 
     <!-- Alpine.js CDN -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -57,146 +59,157 @@
     <script src="https://cdn.jsdelivr.net/npm/heroicons@2.0.17/dist/heroicons.min.js"></script>
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  </head>
 
-</head>
-
-<body class="min-h-screen flex flex-col bg-gray-300 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+  <body class="min-h-screen flex flex-col bg-gray-300 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
     <script>
-        // Initialize dark mode on page load
-        function initDarkMode() {
-            const isDarkMode = localStorage.getItem('darkMode') === 'true';
-            if (isDarkMode) {
-                document.documentElement.classList.add('dark');
-            }
-            updateDarkModeToggle();
+      // Initialize dark mode on page load
+      function initDarkMode() {
+        const isDarkMode = localStorage.getItem('darkMode') === 'true'
+        if (isDarkMode) {
+          document.documentElement.classList.add('dark')
         }
-
-        function updateDarkModeToggle() {
-            const toggle = document.getElementById('dark-mode-toggle');
-            const isDark = document.documentElement.classList.contains('dark');
-            if (toggle) {
-                toggle.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
-            }
+        updateDarkModeToggle()
+      }
+      
+      function updateDarkModeToggle() {
+        const toggle = document.getElementById('dark-mode-toggle')
+        const isDark = document.documentElement.classList.contains('dark')
+        if (toggle) {
+          toggle.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>'
         }
-
-        // Initialize on page load
-        window.addEventListener('DOMContentLoaded', initDarkMode);
+      }
+      
+      // Initialize on page load
+      window.addEventListener('DOMContentLoaded', initDarkMode)
     </script>
     <!-- NAVBAR -->
     <nav class="fixed top-0 w-full z-30 bg-purple-700 dark:bg-purple-900 py-4 pr-4 pl-4 text-white flex items-center justify-between transition-colors duration-300">
-
-        <!-- Logo and name -->
-        <a href="/" class="flex items-center flex-shrink-0">
-            <div class="flex">
-                <img class="h-20 w-auto rounded-md mr-2" id="logo" src="{% static 'images/9lives_logo.webp' %}"
-                    alt="9 Lives Cat Rescue Logo">
-            </div>
-            <div id="site_name" class="text-white font-semibold text-xl">
-                9 Lives Cat Rescue
-            </div>
-        </a>
-
-        <!-- Right side controls -->
-        <div class="flex items-center gap-6">
-            <!-- Desktop Navigation Menu -->
-            <ul class="hidden md:flex space-x-4 text-sm">
-                <li><a href="/" class="hover:underline">Home</a></li>
-                <li><a href="/about/" class="hover:underline">About Us</a></li>
-                <li><a href="/cats/" class="hover:underline">Cats for adoption</a></li>
-                {% if user.is_authenticated %}
-                <li><a href="/adoptions/" class="hover:underline">Applications</a></li>
-                {% endif %}
-                <li><a href="/vets/" class="hover:underline">Our Vets</a></li>
-                <!-- <li><a href="/fostering/" class="hover:underline">Fostering</a></li>
-                <li><a href="/events/" class="hover:underline">Events</a></li>
-                <li><a href="/shop/" class="hover:underline">Shop</a></li> -->
-            </ul>
-
-            <!-- Apply to Adopt Button -->
-            <a href="{% url 'application_add' %}" class="btn-apply hidden md:inline-block"><i class="fa-solid fa-paw mr-2"></i>Apply</a>
-
-            <!-- Dark Mode Toggle -->
-            <button id="dark-mode-toggle" class="text-white text-xl hover:text-gray-200 focus:outline-none transition" title="Toggle dark mode">
-                <i class="fa-solid fa-moon"></i>
-            </button>
-
-            <!-- Mobile Menu Button (mobile only) -->
-            <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none">
-                <i class="fa fa-bars fa-lg"></i>
-            </button>
+      <!-- Logo and name -->
+      <a href="/" class="flex items-center flex-shrink-0">
+        <div class="flex">
+          <img class="h-20 w-auto rounded-md mr-2" id="logo" src="{% static 'images/9lives_logo.webp' %}" alt="9 Lives Cat Rescue Logo" />
         </div>
+        <div id="site_name" class="text-white font-semibold text-xl">9 Lives Cat Rescue</div>
+      </a>
+
+      <!-- Right side controls -->
+      <div class="flex items-center gap-6">
+        <!-- Desktop Navigation Menu -->
+        <ul class="hidden md:flex space-x-4 text-sm">
+          <li>
+            <a href="/" class="hover:underline">Home</a>
+          </li>
+          <li>
+            <a href="/about-us/" class="hover:underline">About Us</a>
+          </li>
+          <li>
+            <a href="/our-team/" class="hover:underline">Our Team</a>
+          </li>
+          <li>
+            <a href="/cats/" class="hover:underline">Cats for adoption</a>
+          </li>
+          {% if user.is_authenticated %}
+            <li>
+              <a href="/adoptions/" class="hover:underline">Applications</a>
+            </li>
+          {% endif %}
+          <li>
+            <a href="/fostering/" class="hover:underline">Fostering</a>
+          </li>
+          <li>
+            <a href="/our-supporters/" class="hover:underline">Our Supporters</a>
+          </li>
+          <li>
+            <a href="/vets/" class="hover:underline">Our Vets</a>
+          </li>
+          <li>
+            <a href="/fundraising-events/" class="hover:underline">Fundraising/Events</a>
+          </li>
+
+          <!--    <li><a href="/fostering/" class="hover:underline">Fostering</a></li>
+                <li><a href="/shop/" class="hover:underline">Shop</a></li>    -->
+        </ul>
+
+        <!-- Apply to Adopt Button -->
+        <a href="{% url 'application_add' %}" class="btn-apply hidden md:inline-block"><i class="fa-solid fa-paw mr-2"></i>Apply</a>
+
+        <!-- Dark Mode Toggle -->
+        <button id="dark-mode-toggle" class="text-white text-xl hover:text-gray-200 focus:outline-none transition" title="Toggle dark mode"><i class="fa-solid fa-moon"></i></button>
+
+        <!-- Mobile Menu Button (mobile only) -->
+        <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none"><i class="fa fa-bars fa-lg"></i></button>
+      </div>
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu"
-        class="fixed hidden md:hidden mt-28 px-6 pt-2 pb-2 space-y-4 z-50 bg-purple-600 dark:bg-purple-800 w-full text-white transition-colors duration-300">
-        <a href="/" class="block">Home</a>
-        <a href="/about/" class="block">About Us</a>
-        <a href="/cats/" class="block">Cats For Adoption</a>
-        <a href="/vets/" class="block">Our Vets</a>
-        <!-- <a href="/fostering/" class="block">Fostering</a>
-        <a href="/our-supporters/" class="block">Our Supporters</a>
-        <a href="/our-team/" class="block">Our Team</a>
-        <a href="/admin/" class="block">Admin</a> -->
+    <div id="mobile-menu" class="fixed hidden md:hidden mt-28 px-6 pt-2 pb-2 space-y-4 z-50 bg-purple-600 dark:bg-purple-800 w-full text-white transition-colors duration-300">
+      <a href="/" class="block">Home</a>
+      <a href="/about-us/" class="block">About Us</a>
+      <a href="/our-team/" class="block">Our Team</a>
+      <a href="/our-supporters/" class="block">Our Supporters</a>
+      <a href="/fosterting/" class="block">Fostering</a>
+      <a href="/cats/" class="block">Cats For Adoption</a>
+      <a href="/vets/" class="block">Our Vets</a>
+      <a href="/fundraising-events/" class="hover:underline">Fundraising/Events</a>
     </div>
 
     <!-- Mobile Menu Toggle Script -->
     <script>
-        const btn = document.getElementById('mobile-menu-btn');
-        const menu = document.getElementById('mobile-menu');
-        btn.addEventListener('click', () => menu.classList.toggle('hidden'));
-
-        // Dark mode toggle
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        if (darkModeToggle) {
-            darkModeToggle.addEventListener('click', () => {
-                const html = document.documentElement;
-                const isDark = html.classList.toggle('dark');
-                localStorage.setItem('darkMode', isDark.toString());
-                updateDarkModeToggle();
-            });
-        }
+      const btn = document.getElementById('mobile-menu-btn')
+      const menu = document.getElementById('mobile-menu')
+      btn.addEventListener('click', () => menu.classList.toggle('hidden'))
+      
+      // Dark mode toggle
+      const darkModeToggle = document.getElementById('dark-mode-toggle')
+      if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', () => {
+          const html = document.documentElement
+          const isDark = html.classList.toggle('dark')
+          localStorage.setItem('darkMode', isDark.toString())
+          updateDarkModeToggle()
+        })
+      }
     </script>
 
     {% if user.is_authenticated %}
-    <!-- ADMIN PANEL -->
-    <div id="admin-menu"
-        class="fixed flex flex-col gap-1 left-2 bottom-2 z-50 bg-red-950 dark:bg-red-900 text-white rounded-md shadow p-4 pb-12 hidden transition-colors duration-300">
+      <!-- ADMIN PANEL -->
+      <div id="admin-menu" class="fixed flex flex-col gap-1 left-2 bottom-2 z-50 bg-red-950 dark:bg-red-900 text-white rounded-md shadow p-4 pb-12 hidden transition-colors duration-300">
         <p class="font-bold mb-2">Admin Panel</p>
 
         {% block admin_panel %}
+
         {% endblock %}
         <form action="{% url 'logout' %}?next={{ request.path }}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="mt-2 px-4 py-1 bg-red-800 text-sm rounded-full"><i class="fa-solid fa-arrow-right-from-bracket mr-2"></i>Logout</button>
+          {% csrf_token %}
+          <button type="submit" class="mt-2 px-4 py-1 bg-red-800 text-sm rounded-full"><i class="fa-solid fa-arrow-right-from-bracket mr-2"></i>Logout</button>
         </form>
-    </div>
-    <div id="admin-btn"
-        class="text-white bg-black dark:bg-gray-800 hover:bg-red-600 dark:hover:bg-red-600 cursor-pointer w-10 h-10 fixed left-1 bottom-1 rounded-full flex items-center justify-center z-50 transition-colors duration-300">
+      </div>
+      <div id="admin-btn" class="text-white bg-black dark:bg-gray-800 hover:bg-red-600 dark:hover:bg-red-600 cursor-pointer w-10 h-10 fixed left-1 bottom-1 rounded-full flex items-center justify-center z-50 transition-colors duration-300">
         <i class="fa-solid fa-screwdriver-wrench"></i>
-    </div>
+      </div>
 
-    <script>
+      <script>
         // Shrink admin menu on click
-        const admin_btn = document.getElementById('admin-btn');
-        const admin_menu = document.getElementById('admin-menu');
-        admin_btn.addEventListener('click', () => admin_menu.classList.toggle('hidden'));
-    </script>
+        const admin_btn = document.getElementById('admin-btn')
+        const admin_menu = document.getElementById('admin-menu')
+        admin_btn.addEventListener('click', () => admin_menu.classList.toggle('hidden'))
+      </script>
     {% endif %}
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow w-full lg:max-w-7xl mx-auto mt-28 mb-2 p-4">
-        {% block content %}{% endblock %}
+      {% block content %}
+
+      {% endblock %}
     </main>
 
     <!-- FOOTER -->
     <footer class="flex w-full bottom-0 bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-4 transition-colors duration-300">
-        <div class="text-xs max-w-7xl mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
-            <p>© {{ now|date:"Y" }} 9 Lives Cat Rescue - Giving rescue cats a chance at a second life</p>
-        </div>
+      <div class="text-xs max-w-7xl mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
+        <p>© {{ now|date:'Y' }} 9 Lives Cat Rescue - Giving rescue cats a chance at a second life</p>
+      </div>
     </footer>
-
-</body>
-
+  </body>
 </html>

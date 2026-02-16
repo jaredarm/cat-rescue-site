@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_ckeditor_5',
+    'pages',
     'common',
     'cats',
     'fosterhomes',
@@ -152,3 +154,238 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
+
+
+# CKEditor Config
+customColorPalette = [
+    {"color": "hsl(4, 90%, 58%)", "label": "Red"},
+    {"color": "hsl(340, 82%, 52%)", "label": "Pink"},
+    {"color": "hsl(291, 64%, 42%)", "label": "Purple"},
+    {"color": "hsl(262, 52%, 47%)", "label": "Deep Purple"},
+    {"color": "hsl(231, 48%, 48%)", "label": "Indigo"},
+    {"color": "hsl(207, 90%, 54%)", "label": "Blue"},
+]
+
+CKEDITOR_5_CUSTOM_CSS = "/css/custom.css"
+
+CKEDITOR_5_CONFIGS = {
+    "extends": {
+        "language": "en-au",
+        "blockToolbar": [
+            "paragraph",
+            "heading1",
+            "heading2",
+            "heading3",
+            "|",
+            "bulletedList",
+            "numberedList",
+            "|",
+            "blockQuote",
+        ],
+        "toolbar": {
+            "items": [
+                "heading",
+                "paragraph",
+                "|",
+
+                "undo",
+                "redo",
+                "|",
+
+                "bold",
+                "italic",
+                "underline",
+                "strikethrough",
+                "code",
+                "subscript",
+                "superscript",
+                "highlight",
+                "removeFormat",
+                "|",
+
+                "fontSize",
+                "fontFamily",
+                "fontColor",
+                "fontBackgroundColor",
+                "|",
+
+                "alignment",
+                "outdent",
+                "indent",
+                "indentBlock",
+                "|",
+
+                "bulletedList",
+                "numberedList",
+                "todoList",
+                "listProperties",
+                "|",
+
+                "link",
+                "linkImage",
+                "|",
+
+                "imageUpload",
+                "insertImage",
+                "imageInsert",
+                "imageTextAlternative",
+                "imageStyle:inline",
+                "imageStyle:block",
+                "imageStyle:side",
+                "imageStyle:alignLeft",
+                "imageStyle:alignRight",
+                "imageStyle:alignCenter",
+                "|",
+
+                "mediaEmbed",
+                "|",
+
+                "insertTable",
+                "tableColumn",
+                "tableRow",
+                "mergeTableCells",
+                "tableProperties",
+                "tableCellProperties",
+                "toggleTableCaption",
+                "|",
+
+                "blockQuote",
+                "horizontalLine",
+                "pageBreak",
+                "showBlocks",
+                "htmlEmbed",
+                "codeBlock",
+                "sourceEditing",
+                "|",
+
+                "style",
+                "specialCharacters",
+                "specialCharactersEssentials",
+                "selectAll",
+                "findAndReplace",
+                "mention",
+                "markdown",
+                "fullPage"
+            ],
+            "shouldNotGroupWhenFull": True,
+        },
+        "image": {
+            "toolbar": [
+                "imageTextAlternative",
+                "|",
+                "imageStyle:alignLeft",
+                "imageStyle:alignRight",
+                "imageStyle:alignCenter",
+                "imageStyle:side",
+                "|",
+            ],
+            "styles": [
+                "full",
+                "side",
+                "alignLeft",
+                "alignRight",
+                "alignCenter",
+            ],
+        },
+        "table": {
+            "contentToolbar": [
+                "tableColumn",
+                "tableRow",
+                "mergeTableCells",
+                "tableProperties",
+                "tableCellProperties",
+                "toggleTableCaption",
+            ],
+            "tableProperties": {
+                "borderColors": customColorPalette,
+                "backgroundColors": customColorPalette,
+            },
+            "tableCellProperties": {
+                "borderColors": customColorPalette,
+                "backgroundColors": customColorPalette,
+            },
+        },
+        "heading": {
+            "options": [
+                {
+                    "model": "paragraph",
+                    "title": "Paragraph",
+                    "class": "page-paragraph",
+                },
+                {
+                    "model": "heading1",
+                    "view": "h1",
+                    "title": "Heading 1",
+                    "class": "page-heading-main",
+                },
+                {
+                    "model": "heading2",
+                    "view": "h2",
+                    "title": "Heading 2",
+                    "class": "ck-heading_heading2",
+                },
+                {
+                    "model": "heading3",
+                    "view": "h3",
+                    "title": "Heading 3",
+                    "class": "ck-heading_heading3",
+                },
+            ],
+        },
+        "list": {
+            "properties": {
+                "styles": True,
+                "startIndex": True,
+                "reversed": True,
+            },
+        },
+        "link": {"defaultProtocol": "https://"},
+        "htmlSupport": {
+            "allow": [
+                {
+                    "name": "/.*/",
+                    "attributes": True,
+                    "classes": True,
+                    "styles": True
+                },
+            ],
+        },
+        "mention": {
+            "feeds": [
+                {
+                    "marker": "@",
+                    "feed": [
+                        "@Barney",
+                        "@Lily",
+                        "@Marry Ann",
+                        "@Marshall",
+                        "@Robin",
+                        "@Ted",
+                    ],
+                    "minimumCharacters": 1,
+                },
+            ],
+        },
+        "style": {
+            "definitions": [
+                {
+                    "name": "Team Member Card (Horizontal)",
+                    "element": "div",
+                    "classes": ["team-card-horizontal"],
+                },
+                {
+                    "name": "Page Heading",
+                    "element": "h1",
+                    "classes": ["page-heading-main"],
+                },
+                {
+                    "name": "Page Paragraph",
+                    "element": "p",
+                    "classes": ["page-paragraph"],
+                },
+
+
+            ],
+        },
+    },
+}

@@ -1559,6 +1559,10 @@ input[type="file"]:is(.dark *)::file-selector-button:hover {
   margin-right: 0.75rem;
 }
 
+.mr-4 {
+  margin-right: 1rem;
+}
+
 .ms-1 {
   margin-inline-start: 0.25rem;
 }
@@ -2203,6 +2207,10 @@ input[type="file"]:is(.dark *)::file-selector-button:hover {
 
 .rounded-sm {
   border-radius: 0.125rem;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
 }
 
 .border {

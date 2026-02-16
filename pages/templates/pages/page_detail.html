@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block admin_panel %}
+    <a href="{% url 'page_edit' slug=page.slug %}" class="px-4 py-1 bg-yellow-500 text-sm rounded-full">
+    <i class="fa-solid fa-pen-to-square mr-2"></i>Edit this page</a>
+{% endblock %}
+
+{% block title %}
+  {{ page.title }} | 9 Lives Cat Rescue
+{% endblock %}
+
+{% block content %}
+  <div class="page-container">
+    {{ page.content|safe }}
+  </div>
+{% endblock %}

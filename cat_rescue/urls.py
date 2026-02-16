@@ -24,10 +24,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', views.index, name='index'),
-    path('about/', views.about, name='about'),
     path('cats/', include('cats.urls')),
     path('adoptions/', include('adoptions.urls')),
     path('vets/', include('vets.urls')),
+    path('', include('pages.urls')),
+    path("ckeditor5/", include('django_ckeditor_5.urls')),
+    
 ]
 
 if settings.DEBUG:
